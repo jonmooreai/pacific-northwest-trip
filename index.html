@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Oregon Trip" />
+<meta name="theme-color" content="#faf6ef" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#08323a" media="(prefers-color-scheme: dark)" />
 <title>Oregon Coast to Seattle - Jul 12-19, 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -657,11 +662,412 @@
   }
   .sched-loc { background: var(--paper-2); text-align: center; font-size: 10px; font-weight: 600; color: var(--muted); padding: 3px 4px; letter-spacing: 0.06em; text-transform: uppercase; }
 
+  /* ================================================
+     MOBILE APP LAYER - iPhone 15 Pro optimized
+     Bottom tab nav, iOS-style top bar, safe areas
+     ================================================ */
+
+  /* Mobile chrome hidden by default; shown only on narrow viewports */
+  .mobile-topbar, .mobile-tabbar, .mobile-spacer-top, .mobile-spacer-bottom { display: none; }
+
+  @media (max-width: 768px) {
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --tab-height: 56px;
+      --topbar-height: 52px;
+      /* iOS system colors */
+      --ios-blue: #007AFF;
+      --ios-bg: #f2f2f7;
+      --ios-bg-grouped: #ffffff;
+      --ios-separator: rgba(60, 60, 67, 0.18);
+      --ios-label: #000;
+      --ios-label-secondary: rgba(60, 60, 67, 0.6);
+      --ios-fill: rgba(120, 120, 128, 0.12);
+    }
+
+    @supports (font: -apple-system-body) {
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro', system-ui, sans-serif;
+      }
+      h1, h2, h3, h4 {
+        font-family: 'Fraunces', 'New York', Georgia, serif;
+      }
+    }
+
+    body {
+      background: var(--paper);
+      overscroll-behavior-y: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html { scroll-padding-top: calc(var(--topbar-height) + var(--safe-top) + 8px); }
+
+    /* Hide desktop sticky nav on mobile */
+    .nav { display: none; }
+
+    /* No spacer at top: the hero extends behind the translucent top bar (iOS pattern).
+       For non-hero pages we'd want the spacer, but this page always opens at the hero. */
+    .mobile-spacer-top { display: none; }
+    /* Spacer at bottom so last content isn't covered by the tab bar */
+    .mobile-spacer-bottom {
+      display: block;
+      height: calc(var(--tab-height) + var(--safe-bottom) + 16px);
+    }
+
+    /* ===== Mobile Top Bar (iOS-style, transparent over hero, blurs on scroll) ===== */
+    .mobile-topbar {
+      display: flex;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: var(--safe-top) max(14px, var(--safe-left)) 0 max(14px, var(--safe-right));
+      background: linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 100%);
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+      border-bottom: 0.5px solid transparent;
+      color: #fff;
+    }
+    .mobile-topbar.scrolled {
+      background: rgba(250, 246, 239, 0.82);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom-color: rgba(0, 0, 0, 0.10);
+      color: var(--ink);
+    }
+    .mobile-topbar.scrolled .mobile-topbar-side { color: var(--muted); }
+    .mobile-topbar.scrolled .mobile-topbar-title { color: var(--ink); }
+    .mobile-topbar-inner {
+      height: var(--topbar-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 12px;
+    }
+    .mobile-topbar-title {
+      font-family: 'Fraunces', 'New York', Georgia, serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: inherit;
+      letter-spacing: -0.02em;
+      text-align: center;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mobile-topbar-side {
+      min-width: 60px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    .mobile-topbar-side.right { text-align: right; }
+    .mobile-topbar-side .live-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--sunset);
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    /* ===== Mobile Bottom Tab Bar ===== */
+    .mobile-tabbar {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 6px max(8px, var(--safe-left)) calc(var(--safe-bottom) + 4px) max(8px, var(--safe-right));
+      background: rgba(250, 246, 239, 0.82);
+      backdrop-filter: saturate(180%) blur(28px);
+      -webkit-backdrop-filter: saturate(180%) blur(28px);
+      border-top: 0.5px solid rgba(0, 0, 0, 0.08);
+    }
+    .mobile-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 6px 4px 4px;
+      min-height: var(--tab-height);
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      transition: color 0.15s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-tab:active { transform: scale(0.94); }
+    .mobile-tab svg {
+      width: 26px; height: 26px;
+      stroke-width: 1.7;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .mobile-tab.active { color: var(--teal); }
+    .mobile-tab.active svg { stroke-width: 2; }
+
+    /* ===== Hero adjustments ===== */
+    .hero {
+      height: 88vh;
+      min-height: 580px;
+      border-radius: 0 0 24px 24px;
+      overflow: hidden;
+      margin-top: 0;
+    }
+    .hero-content {
+      padding-top: calc(var(--topbar-height) + var(--safe-top) + 12px);
+      padding-bottom: 32px;
+      padding-left: max(22px, var(--safe-left));
+      padding-right: max(22px, var(--safe-right));
+    }
+    .hero h1 {
+      font-size: clamp(38px, 9vw, 52px);
+      line-height: 1.05;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      margin-bottom: 12px;
+    }
+    .hero-eyebrow::before { width: 20px; }
+    .hero-sub {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 22px;
+    }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 18px;
+      padding-top: 18px;
+    }
+    .hero-meta-item .label { font-size: 10px; }
+    .hero-meta-item .val { font-size: 17px; }
+    .hero-credit { display: none; }
+
+    /* ===== Section padding ===== */
+    section { padding: 32px 0; }
+    .container {
+      padding-left: max(20px, var(--safe-left));
+      padding-right: max(20px, var(--safe-right));
+    }
+    .section-head { margin-bottom: 24px; }
+    h2 { font-size: clamp(28px, 7vw, 36px); letter-spacing: -0.02em; }
+    .lede { font-size: 15px; margin-top: 12px; }
+    .section-eyebrow { font-size: 10px; margin-bottom: 8px; }
+
+    /* ===== Alerts ===== */
+    .alert {
+      margin: 0 max(20px, var(--safe-left)) 28px;
+      max-width: none;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 12px;
+    }
+    #overview .alert { margin-left: 0; margin-right: 0; }
+
+    /* ===== Stats (2-column) ===== */
+    .stats { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+    .stat { padding: 18px 16px; border-radius: 14px; }
+    .stat .num { font-size: 30px; }
+    .stat .lab { font-size: 10px; margin-top: 6px; }
+
+    /* ===== Route ===== */
+    .route { padding: 22px 18px; border-radius: 16px; }
+    .route h3 { font-size: 18px; margin-bottom: 16px; }
+    .route-map {
+      gap: 0;
+      padding-bottom: 4px;
+      margin: 0 -8px;
+    }
+    .route-stop { min-width: 78px; padding: 12px 4px 10px; }
+    .route-stop .place { font-size: 12px; }
+    .route-stop .nights { font-size: 9px; }
+    .route-leg { min-width: 50px; }
+    .route-leg .miles {
+      padding: 3px 6px;
+      font-size: 9px;
+    }
+
+    /* ===== Map ===== */
+    .map-wrap { padding: 14px; border-radius: 16px; margin-top: 20px; }
+    .map-wrap h3 { font-size: 18px; }
+    .map-wrap .map-sub { font-size: 12px; margin-bottom: 12px; }
+    #trip-map { height: 380px; border-radius: 12px; }
+    .map-legend { font-size: 12px; gap: 10px; }
+
+    /* ===== Flights ===== */
+    .flights { grid-template-columns: 1fr; gap: 14px; margin-top: 24px; }
+    .flight { padding: 20px 18px; border-radius: 16px; }
+    .airport .code { font-size: 30px; }
+    .airport .city { font-size: 11px; }
+    .airport .time { font-size: 13px; }
+
+    /* ===== Day sections ===== */
+    .day { padding: 36px 0 48px; }
+    .day-head {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      align-items: start;
+    }
+    .day-num { font-size: 56px; line-height: 0.85; }
+    .day-num .of { font-size: 13px; }
+    .day-date { font-size: 11px; margin-top: 4px; }
+    .day-title { font-size: 24px; margin-bottom: 8px; line-height: 1.15; }
+    .day-head p { font-size: 14px; line-height: 1.5; }
+    .day-tags { gap: 6px; margin-top: 12px; }
+    .tag { font-size: 11px; padding: 4px 10px; }
+
+    /* ===== Timeline ===== */
+    .timeline-rail { padding-left: 24px; }
+    .timeline-rail::before { left: 7px; width: 2px; }
+    .tl-item {
+      padding-right: 0;
+      padding-bottom: 22px;
+      min-height: 0;
+    }
+    .tl-item::before {
+      left: -22px; top: 4px;
+      width: 12px; height: 12px;
+      border-width: 2.5px;
+    }
+    .tl-time { font-size: 12px; }
+    .tl-title { font-size: 16px; line-height: 1.25; }
+    .tl-body { font-size: 13px; line-height: 1.55; }
+    .tl-photo {
+      position: static;
+      width: 100%;
+      aspect-ratio: 16/10;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      border-radius: 12px;
+    }
+    .tl-chip { font-size: 10px; padding: 3px 8px; }
+    .day-summary { padding: 16px 18px; border-radius: 12px; font-size: 12px; }
+    .day-summary .row { padding: 5px 0; }
+
+    /* ===== Hotels ===== */
+    .hotels { grid-template-columns: 1fr; gap: 14px; }
+    .hotel { border-radius: 16px; }
+    .hotel-img { aspect-ratio: 16/10; }
+    .hotel-body { padding: 18px; }
+    .hotel-name { font-size: 17px; }
+    .hotel-meta { font-size: 12px; line-height: 1.5; }
+    .hotel-price { font-size: 22px; }
+
+    /* ===== Gems ===== */
+    .gems-grid { grid-template-columns: 1fr; gap: 14px; margin-top: 18px; }
+    .gem { border-radius: 16px; }
+    .gem-name { font-size: 17px; }
+    .gem-desc { font-size: 13px; }
+
+    /* ===== Schedule (horizontally scrollable, sticky time col) ===== */
+    .sched-grid { font-size: 11px; }
+    .sched-grid td { height: 24px; }
+    .sched-time-col { width: 50px; }
+    .sched-day-hdr {
+      min-width: 102px;
+      padding: 6px 4px;
+      font-size: 13px;
+    }
+    .sched-day-hdr span { font-size: 9px; }
+    .sched-time {
+      font-size: 10px;
+      padding: 0 4px;
+      position: sticky;
+      left: 0;
+      z-index: 1;
+    }
+    .sched-cell { font-size: 9px; }
+    .sched-loc { font-size: 9px; padding: 2px 3px; }
+
+    /* ===== Budget ===== */
+    .budget-grid { grid-template-columns: 1fr; gap: 24px; }
+    .budget-row {
+      grid-template-columns: 1fr auto;
+      padding: 14px 18px;
+      gap: 12px;
+    }
+    .budget-row .cat { font-size: 15px; }
+    .budget-row .det { font-size: 12px; }
+    .budget-row .amt { font-size: 18px; min-width: 70px; }
+    .budget-note { padding: 22px 20px; font-size: 13px; border-radius: 14px; }
+
+    /* ===== Tides ===== */
+    .tides-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tide-card { padding: 18px 14px; border-radius: 14px; }
+    .tide-spot { font-size: 15px; margin: 6px 0 10px; }
+    .tide-time { font-size: 20px; }
+    .tide-label { font-size: 11px; line-height: 1.4; }
+
+    /* ===== Booking ===== */
+    .book-item {
+      grid-template-columns: 1fr;
+      padding: 16px 18px;
+      gap: 6px;
+      border-radius: 14px;
+    }
+    .book-item .book-when { text-align: left; grid-column: 1; grid-row: auto; font-size: 14px; }
+    .book-item .book-what { font-size: 15px; flex-wrap: wrap; }
+    .book-item .book-detail { font-size: 12px; line-height: 1.5; }
+
+    /* ===== Packing ===== */
+    .packing-grid { grid-template-columns: 1fr; gap: 14px; }
+    .pack-card { padding: 20px 18px; border-radius: 14px; }
+    .pack-card h4 { font-size: 15px; margin-bottom: 12px; }
+    .pack-card li { font-size: 13px; padding: 5px 0; }
+
+    /* ===== Footer ===== */
+    footer { padding: 40px 24px calc(40px + var(--tab-height) + var(--safe-bottom)); }
+    footer .tag-line { font-size: 15px; }
+
+    /* ===== Section dividers more iOS-like ===== */
+    #overview, #hotels, #gems, #tides { padding-top: 40px; padding-bottom: 40px; }
+  }
+
+  /* Even tighter for very narrow phones */
+  @media (max-width: 380px) {
+    .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat { padding: 16px 14px; }
+    .stat .num { font-size: 26px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .tides-grid { grid-template-columns: 1fr; }
+  }
+
+  /* iPhone 15 Pro Dynamic Island compensation when in standalone */
+  @media (display-mode: standalone) and (max-width: 768px) {
+    .mobile-topbar { background: rgba(250, 246, 239, 0.95); }
+  }
+
 </style>
 </head>
 <body>
 
-<!-- ===================== NAV ===================== -->
+<!-- ===================== MOBILE TOP BAR ===================== -->
+<header class="mobile-topbar" id="mobileTopbar" aria-hidden="true">
+  <div class="mobile-topbar-inner">
+    <div class="mobile-topbar-side">Jul 12 - 19</div>
+    <div class="mobile-topbar-title" id="mobileTitle">Oregon Trip</div>
+    <div class="mobile-topbar-side right"><span class="live-dot"></span>Booked</div>
+  </div>
+</header>
+<div class="mobile-spacer-top" aria-hidden="true"></div>
+
+<!-- ===================== DESKTOP NAV ===================== -->
 <nav class="nav">
   <div class="nav-inner">
     <div class="brand">PDX -> Coast -> SEA<small>Jul 12 - 19, 2026</small></div>
@@ -784,7 +1190,7 @@
       </div>
     </div>
 
-    <div class="map-wrap">
+    <div class="map-wrap" id="mapSection">
       <h3>Interactive route map</h3>
       <div class="map-sub">Click any pin for details. Drag to pan, scroll or pinch to zoom, or use the +/- buttons in the corner.</div>
       <div id="trip-map"></div>
@@ -3160,6 +3566,31 @@
   </div>
 </section>
 
+<!-- ===================== MOBILE BOTTOM TAB BAR ===================== -->
+<div class="mobile-spacer-bottom" aria-hidden="true"></div>
+<nav class="mobile-tabbar" id="mobileTabbar" aria-label="Section tabs">
+  <a class="mobile-tab" href="#overview" data-tab="overview" data-label="Overview">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5L12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+    <span>Trip</span>
+  </a>
+  <a class="mobile-tab" href="#day1" data-tab="days" data-label="Days">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17"/><path d="M8 3v4"/><path d="M16 3v4"/></svg>
+    <span>Days</span>
+  </a>
+  <a class="mobile-tab" href="#mapSection" data-tab="map" data-label="Map">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3 3 5.5v15.5L9 18.5l6 2.5 6-2.5V3l-6 2.5L9 3z"/><path d="M9 3v15.5"/><path d="M15 5.5V21"/></svg>
+    <span>Map</span>
+  </a>
+  <a class="mobile-tab" href="#hotels" data-tab="hotels" data-label="Stays">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19v-7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v7"/><path d="M3 19h18"/><path d="M7 9V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/><circle cx="9" cy="13" r="1.4"/></svg>
+    <span>Stays</span>
+  </a>
+  <a class="mobile-tab" href="#booking" data-tab="more" data-label="More">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg>
+    <span>More</span>
+  </a>
+</nav>
+
 <!-- ===================== FOOTER ===================== -->
 <footer>
   <div class="brand">PDX -> Coast -> SEA</div>
@@ -3274,6 +3705,106 @@
     }
     update();
     setInterval(update, 60000);
+  })();
+
+  /* ===== Mobile scroll-spy + tab navigation ===== */
+  (function mobileNav() {
+    const tabbar = document.getElementById('mobileTabbar');
+    if (!tabbar) return;
+
+    const tabs = Array.from(tabbar.querySelectorAll('.mobile-tab'));
+    const titleEl = document.getElementById('mobileTitle');
+    const topbar = document.getElementById('mobileTopbar');
+
+    /* Map of section id -> { tab key, title to show } */
+    const sectionMap = [
+      { id: 'overview', tab: 'overview', title: 'Overview' },
+      { id: 'flights', tab: 'overview', title: 'Flights' },
+      { id: 'mapSection', tab: 'map', title: 'Route Map' },
+      { id: 'day1', tab: 'days', title: 'Day 1 · Sun Jul 12' },
+      { id: 'day2', tab: 'days', title: 'Day 2 · Mon Jul 13' },
+      { id: 'day3', tab: 'days', title: 'Day 3 · Tue Jul 14' },
+      { id: 'day4', tab: 'days', title: 'Day 4 · Wed Jul 15' },
+      { id: 'day5', tab: 'days', title: 'Day 5 · Thu Jul 16' },
+      { id: 'day6', tab: 'days', title: 'Day 6 · Fri Jul 17' },
+      { id: 'day7', tab: 'days', title: 'Day 7 · Sat Jul 18' },
+      { id: 'day8', tab: 'days', title: 'Day 8 · Sun Jul 19' },
+      { id: 'hotels', tab: 'hotels', title: 'Where We Stay' },
+      { id: 'gems', tab: 'hotels', title: 'Hidden Gems' },
+      { id: 'schedule', tab: 'more', title: 'Schedule' },
+      { id: 'budget', tab: 'more', title: 'Budget' },
+      { id: 'tides', tab: 'more', title: 'Tides' },
+      { id: 'booking', tab: 'more', title: 'Booking' },
+      { id: 'packing', tab: 'more', title: 'Packing' }
+    ];
+
+    /* Find currently visible section based on scroll position */
+    function getCurrentSection() {
+      const offset = 80; /* approximate top bar offset */
+      let current = sectionMap[0];
+      for (const s of sectionMap) {
+        const el = document.getElementById(s.id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top - offset <= 0) {
+          current = s;
+        } else {
+          break;
+        }
+      }
+      return current;
+    }
+
+    function setActiveTab(tabKey) {
+      tabs.forEach(t => {
+        const isActive = t.dataset.tab === tabKey;
+        t.classList.toggle('active', isActive);
+      });
+    }
+
+    function setTitle(text) {
+      if (titleEl && titleEl.textContent !== text) {
+        titleEl.textContent = text;
+      }
+    }
+
+    let lastTitle = '';
+    let lastTab = '';
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const cur = getCurrentSection();
+        if (cur.tab !== lastTab) { setActiveTab(cur.tab); lastTab = cur.tab; }
+        /* Hero is at top: show "Oregon Trip" instead of section title */
+        const heroEl = document.querySelector('.hero');
+        const heroBottom = heroEl ? heroEl.offsetTop + heroEl.offsetHeight - 80 : 600;
+        const overHero = window.scrollY < heroBottom;
+        const next = overHero ? 'Oregon Trip' : cur.title;
+        if (next !== lastTitle) { setTitle(next); lastTitle = next; }
+        /* Top bar gains blur background once we scroll off the hero */
+        if (topbar) {
+          topbar.classList.toggle('scrolled', !overHero);
+        }
+        ticking = false;
+      });
+    }
+
+    /* Smooth scroll on tab click (let CSS scroll-padding handle the offset) */
+    tabs.forEach(t => {
+      t.addEventListener('click', e => {
+        const href = t.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   })();
 
 </script>
