@@ -254,14 +254,24 @@
   .map-pin-mini.airport { background: var(--sunset); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--sunset); }
   /* Leaflet custom marker */
   .trip-marker {
-    width: 32px; height: 32px; border-radius: 50%;
+    width: 30px; height: 30px; border-radius: 50%;
     background: var(--teal); color: #fff;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Fraunces', serif; font-size: 15px; font-weight: 700;
-    box-shadow: 0 0 0 3px #fff, 0 4px 14px rgba(0,0,0,0.25);
+    font-family: 'Fraunces', serif; font-size: 13px; font-weight: 700;
+    box-shadow: 0 0 0 2px #fff, 0 3px 10px rgba(0,0,0,0.28);
     border: 2px solid #fff;
+    transition: transform 0.15s;
   }
+  .trip-marker:hover { transform: scale(1.12); z-index: 1000; }
   .trip-marker.airport { background: var(--sunset); }
+  .trip-marker.hotel { background: var(--teal); }
+  .trip-marker.hike { background: var(--moss); }
+  .trip-marker.coast { background: var(--gold); }
+  .trip-marker.sight { background: var(--ink); }
+  .map-pin-mini.hotel { background: var(--teal); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--teal); }
+  .map-pin-mini.hike { background: var(--moss); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--moss); }
+  .map-pin-mini.coast { background: var(--gold); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--gold); }
+  .map-pin-mini.sight { background: var(--ink); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ink); }
   .leaflet-popup-content-wrapper {
     border-radius: 10px; padding: 4px 6px;
   }
@@ -359,15 +369,18 @@
     border-radius: 2px;
   }
   .tl-item {
-    position: relative; padding-bottom: 28px;
-    padding-right: 400px;
-    min-height: 260px;
+    position: relative;
+    padding: 0 0 14px 0;
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 2px 18px;
+    align-items: baseline;
   }
   .tl-item:last-child { padding-bottom: 0; }
   .tl-item::before {
-    content: ""; position: absolute; left: -32px; top: 6px;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: #fff; border: 3px solid var(--teal);
+    content: ""; position: absolute; left: -32px; top: 7px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #fff; border: 2.5px solid var(--teal);
     z-index: 2;
     box-sizing: border-box;
   }
@@ -376,40 +389,30 @@
   .tl-item.hike::before { border-color: var(--moss); }
   .tl-item.hotel::before { border-color: var(--ink); background: var(--ink); }
   .tl-time {
+    grid-column: 1;
+    grid-row: 1 / span 3;
     font-family: 'Fraunces', serif;
-    font-size: 14px; color: var(--teal); font-weight: 600;
-    letter-spacing: 0.04em;
-    margin-bottom: 4px;
+    font-size: 13px; color: var(--teal); font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+    padding-top: 2px;
   }
   .tl-title {
-    font-family: 'Fraunces', serif; font-size: 19px; font-weight: 500;
-    color: var(--ink); margin-bottom: 6px;
+    grid-column: 2;
+    font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500;
+    color: var(--ink); margin-bottom: 2px;
+    line-height: 1.3;
   }
-  .tl-body { font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
-  .tl-body p + p { margin-top: 8px; }
+  .tl-body {
+    grid-column: 2;
+    font-size: 13.5px; color: var(--ink-soft); line-height: 1.55;
+  }
+  .tl-body p + p { margin-top: 6px; }
   .tl-meta {
-    display: inline-flex; flex-wrap: wrap; gap: 8px;
-    margin-top: 10px;
+    grid-column: 2;
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 6px;
   }
-  .tl-photo {
-    position: absolute;
-    top: 0; right: 0;
-    width: 280px;
-    aspect-ratio: 4/3;
-    border-radius: 10px;
-    background-size: cover;
-    background-position: center;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-  }
-  .tl-photo-cap {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    padding: 10px 12px;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
-    color: #fff;
-  }
-  .tl-photo-name { font-family: 'Fraunces', serif; font-size: 12px; font-weight: 500; }
-  .tl-photo-loc { font-size: 10px; color: rgba(255, 255, 255, 0.8); margin-top: 1px; }
   .tl-chip {
     background: #fff; border: 1px solid var(--line);
     padding: 3px 10px; border-radius: 99px;
@@ -420,18 +423,25 @@
   .tl-chip.drive { background: #fbf3df; color: var(--gold); border-color: rgba(184, 138, 58, 0.3); }
   .tl-chip.hike { background: #ebf2e6; color: var(--moss); border-color: rgba(74, 107, 60, 0.3); }
   .day-summary {
-    background: #fff; border-radius: 12px;
-    padding: 22px; margin-top: 14px;
+    background: #fff; border-radius: 10px;
+    padding: 14px 20px; margin-bottom: 24px;
     border: 1px solid var(--line);
     font-size: 13px; color: var(--ink-soft);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0 32px;
   }
   .day-summary .row {
-    display: flex; justify-content: space-between; padding: 6px 0;
-    border-bottom: 1px dashed var(--line);
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 4px 0;
   }
-  .day-summary .row:last-child { border-bottom: none; }
-  .day-summary .row .k { color: var(--muted); }
-  .day-summary .row .v { font-weight: 500; color: var(--ink); }
+  .day-summary .row .k {
+    color: var(--muted); font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+  }
+  .day-summary .row .v {
+    font-weight: 500; color: var(--ink);
+    font-family: 'Fraunces', serif; font-size: 15px;
+  }
 
   /* ============ HOTELS ============ */
   #hotels { background: var(--teal-deep); color: #fff; }
@@ -440,7 +450,7 @@
   #hotels .section-eyebrow { color: var(--sunset-soft); }
   #hotels .lede { color: rgba(255, 255, 255, 0.7); }
   .hotels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-  .hotel {
+  .hotels .hotel {
     background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px; overflow: hidden;
@@ -448,7 +458,7 @@
     text-decoration: none; color: inherit;
     display: flex; flex-direction: column;
   }
-  .hotel:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.1); }
+  .hotels .hotel:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.1); }
   .hotel-img { aspect-ratio: 4/3; background-size: cover; background-position: center; }
   .hotel-body { padding: 20px; }
   .hotel-loc { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sunset-soft); font-weight: 600; }
@@ -606,8 +616,6 @@
     .tides-grid { grid-template-columns: 1fr 1fr; }
     .packing-grid { grid-template-columns: 1fr; }
     .nav-links { display: none; }
-    .tl-item { padding-right: 0; min-height: 0; }
-    .tl-photo { position: static; width: 100%; aspect-ratio: 16/10; margin-top: 12px; }
   }
   @media (max-width: 600px) {
     .hotels { grid-template-columns: 1fr; }
@@ -933,36 +941,40 @@
     .tag { font-size: 11px; padding: 4px 10px; }
 
     /* ===== Timeline ===== */
-    .timeline-rail { padding-left: 24px; }
-    .timeline-rail::before { left: 7px; width: 2px; }
+    .timeline-rail { padding-left: 22px; }
+    .timeline-rail::before { left: 5px; width: 2px; }
     .tl-item {
-      padding-right: 0;
-      padding-bottom: 22px;
-      min-height: 0;
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding-bottom: 16px;
     }
     .tl-item::before {
-      left: -22px; top: 4px;
-      width: 12px; height: 12px;
-      border-width: 2.5px;
+      left: -20px; top: 4px;
+      width: 10px; height: 10px;
+      border-width: 2px;
     }
-    .tl-time { font-size: 12px; }
-    .tl-title { font-size: 16px; line-height: 1.25; }
-    .tl-body { font-size: 13px; line-height: 1.55; }
-    .tl-photo {
-      position: static;
-      width: 100%;
-      aspect-ratio: 16/10;
-      margin-top: 10px;
-      margin-bottom: 4px;
-      border-radius: 12px;
-    }
+    .tl-item > .tl-time { grid-column: 1; grid-row: auto; padding-top: 0; }
+    .tl-item > .tl-title { grid-column: 1; }
+    .tl-item > .tl-body { grid-column: 1; }
+    .tl-item > .tl-meta { grid-column: 1; }
+    .tl-time { font-size: 12px; margin-bottom: 2px; }
+    .tl-title { font-size: 15px; line-height: 1.25; margin-bottom: 3px; }
+    .tl-body { font-size: 13px; line-height: 1.5; }
     .tl-chip { font-size: 10px; padding: 3px 8px; }
-    .day-summary { padding: 16px 18px; border-radius: 12px; font-size: 12px; }
-    .day-summary .row { padding: 5px 0; }
+    .day-summary {
+      grid-template-columns: 1fr;
+      gap: 8px 0;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-bottom: 18px;
+    }
+    .day-summary .row { padding: 0; flex-direction: row; justify-content: space-between; }
+    .day-summary .row .v { font-size: 13px; }
 
     /* ===== Hotels ===== */
     .hotels { grid-template-columns: 1fr; gap: 14px; }
-    .hotel { border-radius: 16px; }
+    .hotels .hotel { border-radius: 16px; }
     .hotel-img { aspect-ratio: 16/10; }
     .hotel-body { padding: 18px; }
     .hotel-name { font-size: 17px; }
@@ -1122,12 +1134,12 @@
 <section id="overview">
   <div class="container">
     <div class="alert" style="margin: 0 0 48px; max-width: none;">
-      <strong>Booked:</strong> Allegiant 621 IND-PDX nonstop (Sun Jul 12, $387.80), Delta 739+4027 SEA-AUS-IND (Sun Jul 19, $638.40), and an SUV one-way PDX -> SEA ($644.82). Total locked-in spend: $1,671.02.
+      <strong>Booked:</strong> Allegiant 621 IND-PDX nonstop (Sun Jul 12, $387.80), Delta 739+4027 SEA-AUS-IND (Sun Jul 19, $638.40), an SUV one-way PDX -> SEA ($644.82), and Skamania Lodge 1 night Jul 12 ($467.26). Total locked-in spend: $2,138.28.
     </div>
     <div class="section-head">
       <div class="section-eyebrow">The shape of the trip</div>
       <h2>Four bases, <em>one quiet pace</em>.</h2>
-      <p class="lede">Minimal packing-and-moving. We settle into four hotels - one travel-night in the Gorge, then back-to-back doubles at Cannon Beach, Kalaloch in Olympic NP, and Seattle. The route is one-way north with no backtracking, threading the Columbia Gorge, Oregon coast, Olympic Peninsula, and Puget Sound.</p>
+      <p class="lede">Minimal packing-and-moving. We settle into four hotels - one travel-night at Skamania Lodge in the Gorge, then back-to-back doubles at Cannon Beach, Kalaloch in Olympic NP, and Seattle. The route is one-way north with no backtracking, threading the Columbia Gorge, Oregon coast, Olympic Peninsula, and Puget Sound.</p>
     </div>
 
     <div class="stats">
@@ -1157,13 +1169,13 @@
           <div class="place">PDX</div>
           <div class="nights">Arrive Sun</div>
         </div>
-        <div class="route-leg"><span class="miles">65 mi · 1h 5m</span></div>
+        <div class="route-leg"><span class="miles">50 mi · 1h</span></div>
         <div class="route-stop">
           <div class="dot"></div>
-          <div class="place">Hood River</div>
+          <div class="place">Stevenson</div>
           <div class="nights">1 night</div>
         </div>
-        <div class="route-leg"><span class="miles">130 mi · 2h 30m</span></div>
+        <div class="route-leg"><span class="miles">160 mi · 3h 15m</span></div>
         <div class="route-stop">
           <div class="dot"></div>
           <div class="place">Cannon Beach</div>
@@ -1195,8 +1207,11 @@
       <div class="map-sub">Click any pin for details. Drag to pan, scroll or pinch to zoom, or use the +/- buttons in the corner.</div>
       <div id="trip-map"></div>
       <div class="map-legend">
-        <span class="item"><span class="map-pin-mini airport">A</span> Airports (PDX, SEA)</span>
-        <span class="item"><span class="map-pin-mini">1-8</span> Trip stops in order</span>
+        <span class="item"><span class="map-pin-mini airport">A</span> Airport</span>
+        <span class="item"><span class="map-pin-mini hotel">H</span> Hotel / lodging</span>
+        <span class="item"><span class="map-pin-mini hike">T</span> Trail / hike</span>
+        <span class="item"><span class="map-pin-mini coast">C</span> Coast / beach</span>
+        <span class="item"><span class="map-pin-mini sight">S</span> Sight / landmark</span>
         <span class="item" style="color: var(--muted);">Dashed line shows the driving route.</span>
       </div>
     </div>
@@ -1289,56 +1304,34 @@
         <div class="day-date">Sunday, July 12</div>
       </div>
       <div>
-        <h3 class="day-title">Touch down, head east into the Gorge.</h3>
-        <p style="color: var(--muted); font-size: 16px; max-width: 620px;">A short flight by West Coast standards, then a one-hour drive into the Columbia River Gorge for an easy first night. We trade plane food for a dinner overlooking windsurfers on the Columbia.</p>
+        <h3 class="day-title">Touch down, cross the Bridge of the Gods.</h3>
+        <p style="color: var(--muted); font-size: 16px; max-width: 620px;">A short flight by West Coast standards, then a one-hour drive into the Columbia River Gorge to Skamania Lodge in Stevenson, WA. Dinner on the lodge's lawn with the river and Bonneville Dam below.</p>
         <div class="day-tags">
-          <span class="tag drive">PDX -> Hood River · 65 mi · 1h 5m</span>
+          <span class="tag drive">PDX -> Stevenson · 50 mi · 1h</span>
           <span class="tag">Travel day</span>
-          <span class="tag hotel">Hood River</span>
+          <span class="tag hotel">Skamania Lodge</span>
         </div>
       </div>
     </div>
+    <div class="day-summary">
+          <div class="row"><span class="k">Driving today</span><span class="v">50 mi · 1h</span></div>
+          <div class="row"><span class="k">Activities</span><span class="v">1 (arrival)</span></div>
+          <div class="row"><span class="k">Hotel</span><span class="v">Skamania Lodge, Stevenson WA</span></div>
+        </div>
 
     <div class="timeline">
       <div class="timeline-rail">
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/New_Indianapolis_Airport_-_IND_-_Flickr_-_hyku.jpg/1920px-New_Indianapolis_Airport_-_IND_-_Flickr_-_hyku.jpg"
-             data-caption-name="Drive to IND"
-             data-caption-loc="Home -> Indianapolis Airport">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/New_Indianapolis_Airport_-_IND_-_Flickr_-_hyku.jpg/1920px-New_Indianapolis_Airport_-_IND_-_Flickr_-_hyku.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Drive to IND</div>
-              <div class="tl-photo-loc">Home -> Indianapolis Airport</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">11:25 AM</div>
           <div class="tl-title">Drive to Indianapolis Airport</div>
           <div class="tl-body">40-minute drive to IND. Arrive 1.5 hours before the 1:37 PM departure.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/New_Indianapolis_Airport_-_IND_-_Flickr_-_hyku.jpg/1920px-New_Indianapolis_Airport_-_IND_-_Flickr_-_hyku.jpg"
-             data-caption-name="Indianapolis International"
-             data-caption-loc="IND · 10:30 AM ET">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/New_Indianapolis_Airport_-_IND_-_Flickr_-_hyku.jpg/1920px-New_Indianapolis_Airport_-_IND_-_Flickr_-_hyku.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Indianapolis International</div>
-              <div class="tl-photo-loc">IND · 10:30 AM ET</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">12:05 PM</div>
           <div class="tl-title">Chill at the airport</div>
           <div class="tl-body">Check bags, grab lunch, and relax before the 1:37 PM departure.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Allegiant_A320_N248NV_%40IND.jpg/1920px-Allegiant_A320_N248NV_%40IND.jpg"
-             data-caption-name="Allegiant 621"
-             data-caption-loc="IND -> PDX · 1:37 - 3:16 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Allegiant_A320_N248NV_%40IND.jpg/1920px-Allegiant_A320_N248NV_%40IND.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Allegiant 621</div>
-              <div class="tl-photo-loc">IND -> PDX · 1:37 - 3:16 PM</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">1:37 - 3:16 PM</div>
           <div class="tl-title"><a href="https://www.allegiantair.com/booking/flights?origin=IND&destination=PDX&departureDate=2026-07-12&returnDate=&passengers=2" target="_blank" rel="noopener">Allegiant 621 · IND -> PDX</a></div>
           <div class="tl-body">4h 39m nonstop on an A320. Departs 1:37 PM ET, arrives 3:16 PM PT. $387.80 booked.</div>
@@ -1348,16 +1341,7 @@
             <span class="tl-chip">No Wi-Fi</span>
           </div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/PDX_Portland_2985.jpg/1920px-PDX_Portland_2985.jpg"
-             data-caption-name="Portland International (PDX)"
-             data-caption-loc="3:30 PM · Rental car pickup">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/PDX_Portland_2985.jpg/1920px-PDX_Portland_2985.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Portland International (PDX)</div>
-              <div class="tl-photo-loc">3:30 PM · Rental car pickup</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">3:30 - 4:30 PM</div>
           <div class="tl-title"><a href="https://www.flypdx.com/Parking/RentalCars" target="_blank" rel="noopener">Pick up rental car at PDX</a></div>
           <div class="tl-body">Rental garage is a short walk from baggage claim, attached to the terminal. SUV booked one-way PDX -> SEA, $644.82 total for 7 days.</div>
@@ -1366,72 +1350,32 @@
             <span class="tl-chip">SUV · $644.82 · BOOKED</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/3/3d/I-84_in_Columbia_Gorge_%284332509155%29.jpg"
-             data-caption-name="Columbia River Gorge"
-             data-caption-loc="I-84 East · 65 mi · 1h 5m">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3d/I-84_in_Columbia_Gorge_%284332509155%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Columbia River Gorge</div>
-              <div class="tl-photo-loc">I-84 East · 65 mi · 1h 5m</div>
-            </div>
-          </div>
-          <div class="tl-time">4:30 - 5:35 PM</div>
-          <div class="tl-title">Drive PDX -> Hood River</div>
-          <div class="tl-body">Take I-205 N to I-84 E and follow the Columbia River the whole way. The drive opens up around Troutdale and turns into one of the most beautiful interstate stretches in the US - the river on your left, basalt cliffs on your right, the green wall of the Gorge ahead.</div>
+        <div class="tl-item drive">
+          <div class="tl-time">4:30 - 5:30 PM</div>
+          <div class="tl-title">Drive PDX -> Stevenson</div>
+          <div class="tl-body">I-205 N across the Columbia into Washington, then east on WA-14 along the north bank of the Columbia. Quieter and more scenic than the I-84 side - two-lane road with the river on your right, basalt cliffs on your left, and the Bonneville Dam in view as you approach Stevenson.</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">65 mi · 1h 5m</span>
-            <span class="tl-chip">I-84 East</span>
+            <span class="tl-chip drive">50 mi · 1h</span>
+            <span class="tl-chip">WA-14 East</span>
           </div>
         </div>
-        <div class="tl-item hotel"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/3/3d/Hood_River_OR_-_aerial.jpg"
-             data-caption-name="Westcliff Lodge"
-             data-caption-loc="Hood River · Check-in 5:45 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3d/Hood_River_OR_-_aerial.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Westcliff Lodge</div>
-              <div class="tl-photo-loc">Hood River · Check-in 5:45 PM</div>
-            </div>
-          </div>
-          <div class="tl-time">5:45 PM</div>
-          <div class="tl-title">Check in at <a href="https://westcliff-lodge.com/" target="_blank" rel="noopener">Westcliff Lodge</a></div>
-          <div class="tl-body">Built in 1908 right on the cliff edge above the Columbia. Lower-key than the more famous Columbia Gorge Hotel up the road but the view straight down to the river is actually better - and rooms run about a third less. Hot tub, big lawn, private trail down to the water. Ask for a river-side room with the panorama. ~$199/night.</div>
+        <div class="tl-item hotel">
+          <div class="tl-time">5:30 PM</div>
+          <div class="tl-title">Check in at <a href="https://www.skamania.com/" target="_blank" rel="noopener">Skamania Lodge</a></div>
+          <div class="tl-body">254-room cedar-and-stone lodge on a bluff above the Columbia, set on 175 forested acres just east of the Bridge of the Gods. Massive timber-framed Great Hall with 60-foot stone fireplace, golf course, spa, hot tub, zipline + treehouses on the property. Ask for a Gorge-view room. $467.26/night, booked.</div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg/1920px-Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg"
-             data-caption-name="Solstice Wood Fire Pizza"
-             data-caption-loc="Hood River · 7:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg/1920px-Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Solstice Wood Fire Pizza</div>
-              <div class="tl-photo-loc">Hood River · 7:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">7:00 PM</div>
-          <div class="tl-title">Dinner: <a href="https://www.solsticewoodfirecafe.com/" target="_blank" rel="noopener">Solstice Wood Fire Pizza</a></div>
-          <div class="tl-body">A short drive into downtown Hood River. Wood-fired pizzas, salads from local farms, deep PNW beer list. Casual; sit on the patio if the wind has died down. Walk it off along the waterfront after.</div>
+          <div class="tl-title">Dinner at <a href="https://www.skamania.com/dining/cascade-dining-room/" target="_blank" rel="noopener">Cascade Dining Room</a></div>
+          <div class="tl-body">The lodge's flagship restaurant, with floor-to-ceiling windows on the gorge and a PNW menu - cedar-plank salmon, hazelnut-crusted halibut, locally-foraged mushrooms. Walk to the lawn after for the sunset light on the river. Casual alt: <a href="https://www.skamania.com/dining/the-river-rock/" target="_blank" rel="noopener">River Rock</a> in the lower-level pub.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Hood_River_OR_-_aerial.jpg/3840px-Hood_River_OR_-_aerial.jpg"
-             data-caption-name="Wind down at the Gorge Hotel"
-             data-caption-loc="Hood River · 9:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Hood_River_OR_-_aerial.jpg/3840px-Hood_River_OR_-_aerial.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Wind down at the Gorge Hotel</div>
-              <div class="tl-photo-loc">Hood River · 9:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">9:30 PM</div>
-          <div class="tl-title">Wind down at the hotel bar</div>
-          <div class="tl-body">A glass of Oregon pinot noir on the terrace before bed. Lights out early; tomorrow has a full slate.</div>
+          <div class="tl-title">Wind down by the firepit</div>
+          <div class="tl-body">Outdoor firepits on the lawn behind the Great Hall. A glass of Washington pinot from the lobby bar, the gorge dark and quiet below. Lights out early; tomorrow has a full slate.</div>
         </div>
       </div>
-      <div class="day-summary">
-          <div class="row"><span class="k">Driving today</span><span class="v">65 mi · 1h 5m</span></div>
-          <div class="row"><span class="k">Activities</span><span class="v">1 (arrival)</span></div>
-          <div class="row"><span class="k">Hotel</span><span class="v">Westcliff Lodge, Hood River</span></div>
-        </div>
+
     </div>
   </div>
 </section>
@@ -1445,64 +1389,43 @@
         <div class="day-date">Monday, July 13</div>
       </div>
       <div>
-        <h3 class="day-title">Waterfalls, then the first sea stack.</h3>
-        <p style="color: var(--muted); font-size: 16px; max-width: 620px;">A morning loop along the Historic Columbia River Highway hits Vista House and three waterfalls including Multnomah, then a bypass route around Portland to Cannon Beach for the headline sunset of the trip - Haystack Rock.</p>
+        <h3 class="day-title">Lavender, waterfall, then the first sea stack.</h3>
+        <p style="color: var(--muted); font-size: 16px; max-width: 620px;">East to the lavender farm at Mt. Hood's foot, then back west through the Gorge to Wahclella Falls, lunch at Multnomah Lodge, and a Portland skyline stop at Pittock Mansion before pushing to Cannon Beach for the headline sunset of the trip.</p>
         <div class="day-tags">
-          <span class="tag drive">Hotel -> Lavender Farm · 7 mi · 12m</span>
-          <span class="tag drive">Lavender -> Vista House · 55 mi · 1h</span>
-          <span class="tag drive">Vista House -> Multnomah · 6 mi · 15m</span>
-          <span class="tag drive">Gorge -> Cannon Beach · 110 mi · 2h 15m</span>
+          <span class="tag drive">Skamania -> Lavender · 50 mi · 1h</span>
+          <span class="tag drive">Lavender -> Wahclella · 60 mi · 1h 15m</span>
+          <span class="tag drive">Wahclella -> Multnomah Lodge · 9 mi · 15m</span>
+          <span class="tag drive">Multnomah -> Pittock · 25 mi · 35m</span>
+          <span class="tag drive">Pittock -> Cannon Beach · 80 mi · 1h 35m</span>
           <span class="tag">Lavender bloom</span>
           <span class="tag coast">First coast night</span>
         </div>
       </div>
     </div>
+    <div class="day-summary">
+          <div class="row"><span class="k">Driving today</span><span class="v">225 mi · 4h 25m</span></div>
+          <div class="row"><span class="k">Activities</span><span class="v">4 (Lavender, Wahclella, Multnomah Lodge, Pittock)</span></div>
+          <div class="row"><span class="k">Hotel</span><span class="v">Tolovana Inn, Cannon Beach</span></div>
+        </div>
 
     <div class="timeline">
       <div class="timeline-rail">
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/1/19/Columbia_Gorge_Hotel_-_Hood_River_Oregon.jpg"
-             data-caption-name="Westcliff Lodge breakfast"
-             data-caption-loc="Hood River · 7:30 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3d/Hood_River_OR_-_aerial.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Westcliff Lodge breakfast</div>
-              <div class="tl-photo-loc">Hood River · 7:30 AM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">7:30 AM</div>
-          <div class="tl-title">Breakfast at the hotel</div>
-          <div class="tl-body">Light breakfast - we're going to want lunch on the road around noon.</div>
+          <div class="tl-title">Breakfast at <a href="https://www.skamania.com/dining/cascade-dining-room/" target="_blank" rel="noopener">Cascade Dining Room</a></div>
+          <div class="tl-body">Hot breakfast on the lodge's main dining floor with the gorge below. Eat well - it's a long Day 2 and we won't sit down again until Multnomah Lodge for lunch around 1 PM. Check out and load the car after.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Lavender_field_in_full_bloom.jpg/1920px-Lavender_field_in_full_bloom.jpg"
-             data-caption-name="Drive to lavender farm"
-             data-caption-loc="7 mi south on Hwy 35">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Lavender_field_in_full_bloom.jpg/1920px-Lavender_field_in_full_bloom.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Drive to lavender farm</div>
-              <div class="tl-photo-loc">7 mi south on Hwy 35</div>
-            </div>
-          </div>
-          <div class="tl-time">8:30 - 8:45 AM</div>
-          <div class="tl-title">Drive Hood River -> <a href="https://hoodriverlavender.com/" target="_blank" rel="noopener">Hood River Lavender Farms</a></div>
-          <div class="tl-body">Short hop south on Hwy 35 along the Hood River valley. The farm sits at 1,700 ft on a south-facing slope of the Hood River valley with Mt. Hood looming directly behind the lavender rows. <strong>Mid-July is peak bloom.</strong></div>
+        <div class="tl-item drive">
+          <div class="tl-time">8:30 - 9:30 AM</div>
+          <div class="tl-title">Drive Skamania -> <a href="https://hoodriverlavender.com/" target="_blank" rel="noopener">Hood River Lavender Farms</a></div>
+          <div class="tl-body">East on WA-14 to the Hood River Bridge, then south on Hwy 35 along the Hood River valley. The farm sits at 1,700 ft on a south-facing slope with Mt. Hood looming directly behind the rows. <strong>Mid-July is peak bloom.</strong> $1 toll on the Hood River Bridge.</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">7 mi · 12 min</span>
-            <span class="tl-chip">Hwy 35 S</span>
+            <span class="tl-chip drive">50 mi · 1h</span>
+            <span class="tl-chip">WA-14 + Hwy 35</span>
           </div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Lavender_field_in_full_bloom.jpg/1920px-Lavender_field_in_full_bloom.jpg"
-             data-caption-name="Hood River Lavender Farms"
-             data-caption-loc="Mt. Hood backdrop · peak bloom">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Lavender_field_in_full_bloom.jpg/1920px-Lavender_field_in_full_bloom.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Hood River Lavender Farms</div>
-              <div class="tl-photo-loc">Mt. Hood backdrop · peak bloom</div>
-            </div>
-          </div>
-          <div class="tl-time">8:45 - 10:00 AM</div>
+        <div class="tl-item">
+          <div class="tl-time">9:30 - 10:30 AM</div>
           <div class="tl-title"><a href="https://hoodriverlavender.com/" target="_blank" rel="noopener">Hood River Lavender Farms</a></div>
           <div class="tl-body">A 9-acre certified organic lavender farm planted in 80+ varieties on a south-facing slope, with Mt. Hood and Mt. Adams framing the rows. Mid-July hits peak bloom: 8 acres of purple shimmer, the air thick with the scent. U-cut bouquets ($8-12), a small farm store with lavender lemonade, soaps, sachets, and honey, and quiet benches at the top of the field for the Mt. Hood photo. Open daily 9 AM - 5 PM.</div>
           <div class="tl-meta">
@@ -1511,153 +1434,81 @@
             <span class="tl-chip">Bring cash for u-cut</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Vista_House_Crown_Point_October_2019_002.jpg/1920px-Vista_House_Crown_Point_October_2019_002.jpg"
-             data-caption-name="Vista House at Crown Point"
-             data-caption-loc="Historic Columbia River Hwy · 55 mi">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Vista_House_Crown_Point_October_2019_002.jpg/1920px-Vista_House_Crown_Point_October_2019_002.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Vista House at Crown Point</div>
-              <div class="tl-photo-loc">Historic Columbia River Hwy · 55 mi</div>
-            </div>
-          </div>
-          <div class="tl-time">10:00 - 11:00 AM</div>
-          <div class="tl-title">Drive Lavender Farm -> <a href="https://www.oregonstateparks.org/index.cfm?do=parkPage.dsp_parkPage&parkId=152" target="_blank" rel="noopener">Vista House at Crown Point</a></div>
-          <div class="tl-body">Back north to I-84 W, then take Exit 35 (Ainsworth Park) and switch to the Historic Columbia River Highway westbound. Slow road, but every turnout is worth it. Vista House sits 733 feet above the Columbia in a 1918 art-nouveau rotunda; on a clear morning you can see 30+ miles east.</div>
+        <div class="tl-item drive">
+          <div class="tl-time">10:30 - 11:45 AM</div>
+          <div class="tl-title">Drive Lavender Farm -> <a href="https://www.alltrails.com/trail/us/oregon/wahclella-falls" target="_blank" rel="noopener">Wahclella Falls trailhead</a></div>
+          <div class="tl-body">North into Hood River, then I-84 W along the Oregon side of the Columbia. Take Exit 40 (Bonneville Dam) and the trailhead parking lot is right at the off-ramp.</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">55 mi · 1h</span>
-            <span class="tl-chip">Free entry</span>
+            <span class="tl-chip drive">60 mi · 1h 15m</span>
+            <span class="tl-chip">I-84 W to Exit 40</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Multnomah_Falls_on_2_August_2012.jpg/3840px-Multnomah_Falls_on_2_August_2012.jpg"
-             data-caption-name="On the way to Multnomah"
-             data-caption-loc="I-84 west · 6 mi · 15 min">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Multnomah_Falls_on_2_August_2012.jpg/3840px-Multnomah_Falls_on_2_August_2012.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">On the way to Multnomah</div>
-              <div class="tl-photo-loc">I-84 west · 6 mi · 15 min</div>
-            </div>
-          </div>
-          <div class="tl-time">11:15 - 11:30 AM</div>
-          <div class="tl-title">Drive to <a href="https://www.fs.usda.gov/recarea/crgnsa/recarea/?recid=30026" target="_blank" rel="noopener">Multnomah Falls</a></div>
-          <div class="tl-body">Continue west on the Historic Highway. You'll pass Bridal Veil and Wahkeena Falls along the way - quick photo stops if you have the time.</div>
+        <div class="tl-item hike">
+          <div class="tl-time">11:45 AM - 12:45 PM</div>
+          <div class="tl-title"><a href="https://www.alltrails.com/trail/us/oregon/wahclella-falls" target="_blank" rel="noopener">Wahclella Falls Trail</a></div>
+          <div class="tl-body">A 2-mile out-and-back through Tanner Creek Canyon to a 350-foot horsetail waterfall plunging into a deep mossy bowl. <strong>Far less crowded than Multnomah</strong> - no permit required, no parking lottery, no bus tours. The trail follows the creek through old-growth Doug-fir, with side waterfalls and basalt cliffs along the way. <strong>$5 day-use fee</strong> ($10 if no NW Forest Pass).</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">6 mi · 15 min</span>
+            <span class="tl-chip hike">2 mi · 100 ft · easy</span>
+            <span class="tl-chip">No permit needed</span>
+            <span class="tl-chip">Old-growth canyon</span>
           </div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Multnomah_Falls_on_2_August_2012.jpg/3840px-Multnomah_Falls_on_2_August_2012.jpg"
-             data-caption-name="Multnomah Falls + Benson Bridge"
-             data-caption-loc="Columbia River Gorge · 11:00 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Multnomah_Falls_on_2_August_2012.jpg/3840px-Multnomah_Falls_on_2_August_2012.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Multnomah Falls + Benson Bridge</div>
-              <div class="tl-photo-loc">Columbia River Gorge · 11:00 AM</div>
-            </div>
-          </div>
-          <div class="tl-time">11:30 AM - 12:30 PM</div>
-          <div class="tl-title"><a href="https://www.recreation.gov/timed-entry/10089171" target="_blank" rel="noopener">Multnomah Falls</a> + Benson Bridge</div>
-          <div class="tl-body">The 620-foot icon of Oregon. Walk the paved 0.2-mile path to Benson Bridge for the postcard angle from between the upper and lower falls. <strong>Reserve the timed-use permit ($2 per vehicle) on Recreation.gov 14 days ahead</strong> - required May through Labor Day, 9 AM to 6 PM.</div>
-          <div class="tl-meta">
-            <span class="tl-chip hike">0.4 mi · 100 ft · easy</span>
-            <span class="tl-chip">Permit required</span>
-          </div>
-        </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/e/e1/Multnomah_Falls_Lodge_-_Oregon.jpg"
-             data-caption-name="Multnomah Falls Lodge"
-             data-caption-loc="Lunch · 12:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e1/Multnomah_Falls_Lodge_-_Oregon.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Multnomah Falls Lodge</div>
-              <div class="tl-photo-loc">Lunch · 12:30 PM</div>
-            </div>
-          </div>
-          <div class="tl-time">12:45 PM</div>
+        <div class="tl-item meal">
+          <div class="tl-time">1:00 - 1:45 PM</div>
           <div class="tl-title">Lunch at <a href="https://multnomahfallslodge.com/" target="_blank" rel="noopener">Multnomah Falls Lodge</a></div>
-          <div class="tl-body">Perfectly fine sit-down lunch with views of the falls. Or grab sandwiches from a Hood River bakery before you leave.</div>
-        </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Hood_River_OR_-_aerial.jpg/3840px-Hood_River_OR_-_aerial.jpg"
-             data-caption-name="US-26 over the Coast Range"
-             data-caption-loc="110 mi · 2h 15m">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Hood_River_OR_-_aerial.jpg/3840px-Hood_River_OR_-_aerial.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">US-26 over the Coast Range</div>
-              <div class="tl-photo-loc">110 mi · 2h 15m</div>
-            </div>
-          </div>
-          <div class="tl-time">1:30 - 3:50 PM</div>
-          <div class="tl-title">Drive Gorge -> Cannon Beach</div>
-          <div class="tl-body">Back on I-84 W to I-205 S, then west on US-26 (Sunset Highway) all the way to the coast. The road climbs the Coast Range through dense fir, then drops you onto US-101 just north of Cannon Beach. Stop in Seaside (10 minutes north) only if you want a touristy boardwalk break - otherwise push to Cannon Beach.</div>
+          <div class="tl-body">9 mi west of Wahclella along I-84. Sit-down restaurant in the 1925 stone lodge with the falls visible from the patio - get a glimpse of the 620-ft icon without the crowds + permit hassle of stopping for the full Benson Bridge walk. Quick salmon BLT or salad, then keep moving.</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">110 mi · 2h 15m</span>
+            <span class="tl-chip drive">9 mi · 15 min from Wahclella</span>
+          </div>
+        </div>
+        <div class="tl-item drive">
+          <div class="tl-time">2:00 - 2:35 PM</div>
+          <div class="tl-title">Drive Multnomah Lodge -> <a href="https://pittockmansion.org/" target="_blank" rel="noopener">Pittock Mansion</a></div>
+          <div class="tl-body">West on I-84 into Portland, then up into NW Portland's West Hills. Pittock sits at 1,000 ft on the only Portland viewpoint that catches Mt. Hood, Mt. St. Helens, and the city skyline in one frame.</div>
+          <div class="tl-meta">
+            <span class="tl-chip drive">25 mi · 35 min</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">2:35 - 3:15 PM</div>
+          <div class="tl-title"><a href="https://pittockmansion.org/" target="_blank" rel="noopener">Pittock Mansion</a> + skyline overlook</div>
+          <div class="tl-body">A 46-room 1914 French Renaissance mansion built by the Pittock family on a 46-acre forested estate. The grounds and overlook are <strong>free</strong>; mansion tour is $14.50/pp if you want it (we don't need to). The east lawn lookout puts the entire Portland skyline below you with Mt. Hood lined up directly behind. Pop the trunk, eat the snacks, photo, gone.</div>
+          <div class="tl-meta">
+            <span class="tl-chip">Grounds free</span>
+            <span class="tl-chip">5-min walk to overlook</span>
+          </div>
+        </div>
+        <div class="tl-item drive">
+          <div class="tl-time">3:15 - 4:50 PM</div>
+          <div class="tl-title">Drive Pittock -> Cannon Beach</div>
+          <div class="tl-body">Down out of the West Hills, west on US-26 (Sunset Highway) through the Coast Range. The road climbs through dense fir then drops you onto US-101 just north of Cannon Beach. Skip Seaside unless you want the touristy boardwalk - push straight to Tolovana.</div>
+          <div class="tl-meta">
+            <span class="tl-chip drive">80 mi · 1h 35m</span>
             <span class="tl-chip">US-26 W</span>
           </div>
         </div>
-        <div class="tl-item hotel"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Tolovana_Beach.jpg/1920px-Tolovana_Beach.jpg"
-             data-caption-name="Tolovana Inn"
-             data-caption-loc="Tolovana Park · 4:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Tolovana_Beach.jpg/1920px-Tolovana_Beach.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Tolovana Inn</div>
-              <div class="tl-photo-loc">Tolovana Park · 4:00 PM</div>
-            </div>
-          </div>
-          <div class="tl-time">4:00 PM</div>
+        <div class="tl-item hotel">
+          <div class="tl-time">5:00 PM</div>
           <div class="tl-title">Check in at <a href="https://www.tolovanainn.com/" target="_blank" rel="noopener">Tolovana Inn</a></div>
           <div class="tl-body">1.5 miles south of Cannon Beach village - which is the win, not a drawback. Direct beachfront with a clean look at Haystack Rock and the Needles from oceanfront rooms. Condo-style suites with kitchens and balconies (good for an early breakfast on the deck), indoor pool, sauna. The fancier in-town options (Stephanie Inn ~$450, Ocean Lodge ~$340) are walking distance to dinner downtown but Tolovana wins on view-per-dollar and you'll drive into town for dinner anyway. ~$265/night.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/e/e3/Haystack_Rock%2C_Oregon_%28drone_photograph%29.jpg"
-             data-caption-name="First walk on Cannon Beach"
-             data-caption-loc="5:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e3/Haystack_Rock%2C_Oregon_%28drone_photograph%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">First walk on Cannon Beach</div>
-              <div class="tl-photo-loc">5:30 PM</div>
-            </div>
-          </div>
-          <div class="tl-time">5:30 PM</div>
+        <div class="tl-item">
+          <div class="tl-time">6:00 PM</div>
           <div class="tl-title">First walk on the beach</div>
           <div class="tl-body">Out the back door of the hotel and straight onto the sand. Walk south the half-mile to Haystack Rock and orient yourself - tomorrow we'll come at low tide.</div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg/1920px-Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg"
-             data-caption-name="Newmans at 988"
-             data-caption-loc="Cannon Beach · 7:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg/1920px-Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Newmans at 988</div>
-              <div class="tl-photo-loc">Cannon Beach · 7:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">7:30 PM</div>
           <div class="tl-title">Dinner at <a href="https://newmansat988.com/" target="_blank" rel="noopener">Newmans at 988</a></div>
           <div class="tl-body">Tiny French-Italian spot in a 1940s cottage in midtown. Reserve well in advance. Or for casual: The Wayfarer at the Surfsand for oceanfront dining.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/e/e3/Haystack_Rock%2C_Oregon_%28drone_photograph%29.jpg"
-             data-caption-name="Sunset at Haystack Rock"
-             data-caption-loc="8:25 PM · Cannon Beach">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e3/Haystack_Rock%2C_Oregon_%28drone_photograph%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Sunset at Haystack Rock</div>
-              <div class="tl-photo-loc">~9:05 PM · Cannon Beach</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">9:00 PM</div>
           <div class="tl-title">Sunset at <a href="https://friendsofhaystackrock.org/" target="_blank" rel="noopener">Haystack Rock</a></div>
           <div class="tl-body">Sun sets ~9:05 PM in mid-July. Walk the beach south toward the rock with a glass of wine in a thermos. The silhouette is the picture you've seen on every Oregon poster.</div>
         </div>
       </div>
-      <div class="day-summary">
-          <div class="row"><span class="k">Driving today</span><span class="v">180 mi · 3h 40m</span></div>
-          <div class="row"><span class="k">Activities</span><span class="v">3 (Lavender, Vista House, Multnomah)</span></div>
-          <div class="row"><span class="k">Hotel</span><span class="v">Cannon Beach</span></div>
-        </div>
+
     </div>
   </div>
 </section>
@@ -1681,33 +1532,20 @@
         </div>
       </div>
     </div>
+    <div class="day-summary">
+          <div class="row"><span class="k">Driving today</span><span class="v">25 mi · 50 min</span></div>
+          <div class="row"><span class="k">Activities</span><span class="v">3 (Haystack, Hug Point, Ecola)</span></div>
+          <div class="row"><span class="k">Hotel</span><span class="v">Tolovana Inn (night 2)</span></div>
+        </div>
 
     <div class="timeline">
       <div class="timeline-rail">
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg/1920px-Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg"
-             data-caption-name="Sea Level Bakery"
-             data-caption-loc="Cannon Beach · 7:15 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg/1920px-Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Sea Level Bakery</div>
-              <div class="tl-photo-loc">Cannon Beach · 7:15 AM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">7:15 AM</div>
-          <div class="tl-title">Coffee + pastries at <a href="https://www.sealevelbakery.com/" target="_blank" rel="noopener">Sea Level Bakery</a></div>
-          <div class="tl-body">Pick up morning bun and a pour-over to take to the beach. Also grab sandwiches for lunch later - the beach is the best place to eat them.</div>
+          <div class="tl-title">Coffee + pastries at <a href="https://www.elohveecoffee.com/" target="_blank" rel="noopener">Elohveē Coffee Shop</a></div>
+          <div class="tl-body">Native-owned coffee shop two blocks from the beach with a tight menu of single-origin pour-overs and house-baked pastries. Grab cups + a pastry to take to the sand. Alts: <a href="https://www.insomniacoffeecompany.com/" target="_blank" rel="noopener">Insomnia Coffee</a> for a faster grab-and-go, or <a href="https://www.sealevelbakery.com/" target="_blank" rel="noopener">Sea Level Bakery</a> for the bigger pastry case.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Haystacks_Rocks_and_the_Needles%2CCannon_Beach.jpg/3840px-Haystacks_Rocks_and_the_Needles%2CCannon_Beach.jpg"
-             data-caption-name="Haystack Rock at low tide"
-             data-caption-loc="Tidepools · -0.6 ft · 8:18 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Haystacks_Rocks_and_the_Needles%2CCannon_Beach.jpg/3840px-Haystacks_Rocks_and_the_Needles%2CCannon_Beach.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Haystack Rock at low tide</div>
-              <div class="tl-photo-loc">Tidepools · early morning</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">7:45 - 9:30 AM</div>
           <div class="tl-title">Haystack Rock at low tide</div>
           <div class="tl-body">Verify the Jul 14 morning low-tide window via NOAA before you head out (mid-July tides shift hour-to-hour from August). At low water, the western reef around Haystack opens up: tidepools full of green anemones, purple ochre stars, hermit crabs, gooseneck barnacles. Mid-July is peak tufted puffin nesting season - bring binoculars. Volunteers from Friends of Haystack Rock are usually on the sand to help you ID things.</div>
@@ -1717,58 +1555,22 @@
             <span class="tl-chip">Bring binoculars</span>
           </div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Tolovana_Beach.jpg/1920px-Tolovana_Beach.jpg"
-             data-caption-name="Tolovana Beach"
-             data-caption-loc="1.5 mi south of Haystack">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Tolovana_Beach.jpg/1920px-Tolovana_Beach.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Tolovana Beach</div>
-              <div class="tl-photo-loc">1.5 mi south of Haystack</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">9:30 - 11:00 AM</div>
           <div class="tl-title">Walk south on the beach to Tolovana</div>
           <div class="tl-body">Roughly 1.5 miles down the open sand with the Needles (sea stacks south of Haystack) on your right. Turn around when you feel like it. Back at the hotel by ~11.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg/1920px-Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg"
-             data-caption-name="Cannon Beach downtown"
-             data-caption-loc="11:30 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg/1920px-Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Cannon Beach downtown</div>
-              <div class="tl-photo-loc">11:30 AM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">11:30 AM</div>
           <div class="tl-title">Browse downtown Cannon Beach</div>
           <div class="tl-body">Walk the four-block downtown - Bruce's Candy Kitchen for saltwater taffy, Icefire Glassworks for hand-blown glass, Cannon Beach Book Company for a paperback. Pick up something for the rental car the rest of the trip.</div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg/1920px-Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg"
-             data-caption-name="Pelican Brewing / Pizza a' fetta"
-             data-caption-loc="Cannon Beach · 12:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg/1920px-Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Pelican Brewing / Pizza a' fetta</div>
-              <div class="tl-photo-loc">Cannon Beach · 12:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">12:30 PM</div>
-          <div class="tl-title">Lunch: <a href="https://www.pelicanbrewing.com/cannon-beach/" target="_blank" rel="noopener">Pelican Brewing</a> or <a href="https://pizza-a-fetta.com/" target="_blank" rel="noopener">Pizza a' fetta</a></div>
-          <div class="tl-body">Pelican has the wider menu and patio; Pizza a' fetta is the locals' slice spot. Either one works.</div>
+          <div class="tl-title">Lunch: <a href="https://www.pelicanbrewing.com/cannon-beach/" target="_blank" rel="noopener">Pelican Brewing</a>, <a href="https://www.seasonscafecannonbeach.com/" target="_blank" rel="noopener">Seasons Cafe</a>, or <a href="https://pizza-a-fetta.com/" target="_blank" rel="noopener">Pizza a' fetta</a></div>
+          <div class="tl-body">Pelican has the wider menu and patio. Seasons Cafe is the casual breakfast-and-lunch counter locals send you to - chowder, salmon BLT, big salads. Pizza a' fetta is the locals' slice spot.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Hug_Point_Waterfall_at_Pacific_Coast_in_Oregon_2.jpg/1920px-Hug_Point_Waterfall_at_Pacific_Coast_in_Oregon_2.jpg"
-             data-caption-name="On the way to Hug Point"
-             data-caption-loc="5 mi south on US-101">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Hug_Point_Waterfall_at_Pacific_Coast_in_Oregon_2.jpg/1920px-Hug_Point_Waterfall_at_Pacific_Coast_in_Oregon_2.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">On the way to Hug Point</div>
-              <div class="tl-photo-loc">5 mi south on US-101</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">1:45 - 1:55 PM</div>
           <div class="tl-title">Drive to <a href="https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=146" target="_blank" rel="noopener">Hug Point State Recreation Site</a></div>
           <div class="tl-body">South on US-101 about 5 miles. Small parking lot off the highway, easy to miss.</div>
@@ -1776,16 +1578,7 @@
             <span class="tl-chip drive">5 mi · 10 min</span>
           </div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Hug_Point_Waterfall_at_Pacific_Coast_in_Oregon_2.jpg/1920px-Hug_Point_Waterfall_at_Pacific_Coast_in_Oregon_2.jpg"
-             data-caption-name="Hug Point sea caves + waterfall"
-             data-caption-loc="Tide-dependent · 2:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Hug_Point_Waterfall_at_Pacific_Coast_in_Oregon_2.jpg/1920px-Hug_Point_Waterfall_at_Pacific_Coast_in_Oregon_2.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Hug Point sea caves + waterfall</div>
-              <div class="tl-photo-loc">Tide-dependent · 2:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item hike">
           <div class="tl-time">2:00 - 3:30 PM</div>
           <div class="tl-title">Hug Point sea caves + waterfall</div>
           <div class="tl-body">Walk north on the beach about 1/4 mile around the headland (only passable at low to mid-tide - we're well within the window) to find a small sea cave and a 15-foot waterfall pouring directly onto the sand. The old wagon road carved into the cliff above is still visible. Easy and atmospheric.</div>
@@ -1794,16 +1587,7 @@
             <span class="tl-chip">Tide-dependent</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Ecola_State_Park_Haystack_Rock.JPG/3840px-Ecola_State_Park_Haystack_Rock.JPG"
-             data-caption-name="Up to Ecola State Park"
-             data-caption-loc="8 mi · 15 min">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Ecola_State_Park_Haystack_Rock.JPG/3840px-Ecola_State_Park_Haystack_Rock.JPG');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Up to Ecola State Park</div>
-              <div class="tl-photo-loc">8 mi · 15 min</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">3:45 - 4:00 PM</div>
           <div class="tl-title">Drive to <a href="https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=136" target="_blank" rel="noopener">Ecola State Park</a></div>
           <div class="tl-body">Back north through Cannon Beach, then up the steep windy entrance road to Ecola Point. <strong>$5 day-use fee per car.</strong></div>
@@ -1811,16 +1595,7 @@
             <span class="tl-chip drive">8 mi · 15 min</span>
           </div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Indian_beach_-_Ecola_State_Park1.jpg/1920px-Indian_beach_-_Ecola_State_Park1.jpg"
-             data-caption-name="Indian Beach (Point Break)"
-             data-caption-loc="Ecola State Park · 4:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Indian_beach_-_Ecola_State_Park1.jpg/1920px-Indian_beach_-_Ecola_State_Park1.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Indian Beach (Point Break)</div>
-              <div class="tl-photo-loc">Ecola State Park · 4:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item hike">
           <div class="tl-time">4:00 - 5:30 PM</div>
           <div class="tl-title">Ecola Point + Indian Beach</div>
           <div class="tl-body">First, the short paved walk at Ecola Point - this is the cliff overlook of Cannon Beach and Haystack Rock you've seen on calendars. Then drive 1.5 miles further into the park to Indian Beach (where they filmed the surfing scene in <em>Point Break</em>) and walk the sand. Back to the hotel by 6 PM.</div>
@@ -1828,40 +1603,18 @@
             <span class="tl-chip hike">1.5 mi · 200 ft · easy</span>
           </div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg/1920px-Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg"
-             data-caption-name="The Irish Table / EVOO"
-             data-caption-loc="Cannon Beach · 7:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg/1920px-Wood-fired_Pizza_Oven_at_Baronessa_Italian_Restaurant.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">The Irish Table / EVOO</div>
-              <div class="tl-photo-loc">Cannon Beach · 7:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">7:00 PM</div>
           <div class="tl-title">Dinner: <a href="https://theirishtable.com/" target="_blank" rel="noopener">The Irish Table</a> or <a href="https://evoo.biz/" target="_blank" rel="noopener">EVOO</a></div>
           <div class="tl-body">Irish Table is candle-lit and intimate - shared plates, small wine list. EVOO is a chef-led prix-fixe cooking-school dinner if it's on (book weeks ahead).</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Haystacks_Rocks_and_the_Needles%2CCannon_Beach.jpg/3840px-Haystacks_Rocks_and_the_Needles%2CCannon_Beach.jpg"
-             data-caption-name="Beach fire at sunset"
-             data-caption-loc="Below the high-tide line · 8:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Haystacks_Rocks_and_the_Needles%2CCannon_Beach.jpg/3840px-Haystacks_Rocks_and_the_Needles%2CCannon_Beach.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Beach fire at sunset</div>
-              <div class="tl-photo-loc">Below the high-tide line · 8:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">8:30 PM</div>
           <div class="tl-title">Beach fire at sunset</div>
           <div class="tl-body">Beach fires are legal on Cannon Beach below the high-tide line, west of the driftwood. Buy a bundle of wood at the grocery; bring a blanket. Or stay south at Tolovana Beach where it's quieter - light the fire right out the back door of the Inn.</div>
         </div>
       </div>
-      <div class="day-summary">
-          <div class="row"><span class="k">Driving today</span><span class="v">25 mi · 50 min</span></div>
-          <div class="row"><span class="k">Activities</span><span class="v">3 (Haystack, Hug Point, Ecola)</span></div>
-          <div class="row"><span class="k">Hotel</span><span class="v">Tolovana Inn (night 2)</span></div>
-        </div>
+
     </div>
   </div>
 </section>
@@ -1879,72 +1632,42 @@
         <p style="color: var(--muted); font-size: 16px; max-width: 620px;">An old-growth hike at Oswald West to start, then we drive north to Astoria, cross the Columbia on the longest truss bridge in North America, and make our way up the Washington coast to Kalaloch Lodge - the only lodging directly on the Olympic National Park coastal strip.</p>
         <div class="day-tags">
           <span class="tag drive">Cannon Beach -> Oswald West · 10 mi · 20m</span>
-          <span class="tag drive">Oswald West -> Astoria · 35 mi · 45m</span>
+          <span class="tag drive">Neahkahnie viewpoint · 4 mi RT · 10m</span>
+          <span class="tag drive">Oswald West -> Astoria · 37 mi · 50m</span>
           <span class="tag drive">Astoria-Megler bridge · 5 mi · 20m</span>
-          <span class="tag drive">Cape Disappointment -> Lake Quinault/Kalaloch · 130 mi · 2h 30m</span>
+          <span class="tag drive">Cape Disappointment -> La Push · 155 mi · 3h</span>
           <span class="tag hike">One forest hike</span>
           <span class="tag coast">Two states</span>
         </div>
       </div>
     </div>
+    <div class="day-summary">
+          <div class="row"><span class="k">Driving today</span><span class="v">255 mi · 5h 15m</span></div>
+          <div class="row"><span class="k">Activities</span><span class="v">4 (Cape Falcon, Neahkahnie, Cape Disappointment, First Beach)</span></div>
+          <div class="row"><span class="k">Hotel</span><span class="v">Quileute Oceanside Resort, La Push</span></div>
+        </div>
 
     <div class="timeline">
       <div class="timeline-rail">
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg/1920px-Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg"
-             data-caption-name="Lazy Susan Cafe"
-             data-caption-loc="Cannon Beach · 7:30 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg/1920px-Cannon_Beach_-_DPLA_-_a1337031688a9a3a40739fb1354eb09e.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Lazy Susan Cafe</div>
-              <div class="tl-photo-loc">Cannon Beach · 7:30 AM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">7:30 AM</div>
           <div class="tl-title">Breakfast: <a href="https://www.lazy-susan-cafe.com/" target="_blank" rel="noopener">Lazy Susan Cafe</a></div>
           <div class="tl-body">Cannon Beach institution. Cottage setting, hand-crank everything. Get the oatmeal with brown sugar and the smoked salmon scramble. Order a sandwich to-go for lunch on the road.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/e/e3/Haystack_Rock%2C_Oregon_%28drone_photograph%29.jpg"
-             data-caption-name="Check out, load car"
-             data-caption-loc="Departing Cannon Beach">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e3/Haystack_Rock%2C_Oregon_%28drone_photograph%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Check out, load car</div>
-              <div class="tl-photo-loc">Departing Cannon Beach</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">8:45 AM</div>
           <div class="tl-title">Check out, load car</div>
           <div class="tl-body">Big driving day. We push north early to beat traffic.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/0/0d/Cape_Falcon_View_%28Tillamook_County%2C_Oregon_scenic_images%29_%28tilDA0020%29.jpg"
-             data-caption-name="Oswald West / Short Sand"
-             data-caption-loc="11 mi · 20 min">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/0d/Cape_Falcon_View_%28Tillamook_County%2C_Oregon_scenic_images%29_%28tilDA0020%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Oswald West / Short Sand</div>
-              <div class="tl-photo-loc">11 mi · 20 min</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">9:00 - 9:20 AM</div>
           <div class="tl-title">Drive to <a href="https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=149" target="_blank" rel="noopener">Oswald West State Park (Short Sand)</a></div>
-          <div class="tl-body">South on US-101 about 10 miles over Neahkahnie Mountain. Pull off at the signed Short Sand Beach trailhead - parking lot is on the east side of the highway.</div>
+          <div class="tl-body">South on US-101 about 10 miles. Pull off at the signed Short Sand Beach trailhead - parking lot is on the east side of the highway.</div>
           <div class="tl-meta">
             <span class="tl-chip drive">10 mi · 20 min</span>
           </div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/0/0d/Cape_Falcon_View_%28Tillamook_County%2C_Oregon_scenic_images%29_%28tilDA0020%29.jpg"
-             data-caption-name="Cape Falcon Trail"
-             data-caption-loc="Oswald West SP · 3-5 mi">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/0d/Cape_Falcon_View_%28Tillamook_County%2C_Oregon_scenic_images%29_%28tilDA0020%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Cape Falcon Trail</div>
-              <div class="tl-photo-loc">Oswald West SP · 3-5 mi</div>
-            </div>
-          </div>
+        <div class="tl-item hike">
           <div class="tl-time">9:25 - 11:00 AM</div>
           <div class="tl-title"><a href="https://www.alltrails.com/trail/us/oregon/cape-falcon-trail" target="_blank" rel="noopener">Cape Falcon Trail (out-and-back)</a></div>
           <div class="tl-body">Through coastal old-growth Sitka spruce and hemlock to a high meadow on a basalt headland with sweeping ocean views. The trail is rooty and damp but only mildly rolling. Turn around at the meadow - the full out-and-back is about 5 miles, but a 3-mile partial works fine in our window.</div>
@@ -1953,48 +1676,30 @@
             <span class="tl-chip">Old-growth forest</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Astoria%2C_OR_from_the_Astoria_Column.jpg/1920px-Astoria%2C_OR_from_the_Astoria_Column.jpg"
-             data-caption-name="Heading to Astoria"
-             data-caption-loc="35 mi · 45 min">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Astoria%2C_OR_from_the_Astoria_Column.jpg/1920px-Astoria%2C_OR_from_the_Astoria_Column.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Heading to Astoria</div>
-              <div class="tl-photo-loc">35 mi · 45 min</div>
-            </div>
+        <div class="tl-item">
+          <div class="tl-time">11:00 - 11:15 AM</div>
+          <div class="tl-title">Neahkahnie Mountain viewpoint + Manzanita overlook</div>
+          <div class="tl-body">A 2-mile drive south of Oswald West along the cliff face of Neahkahnie Mountain - the most dramatic stretch of US-101 in Oregon. Pull off at the signed viewpoint for a 700-foot drop straight down to Manzanita village curling along the beach. 5-minute stop, then U-turn and head north to Astoria.</div>
+          <div class="tl-meta">
+            <span class="tl-chip drive">4 mi RT · 10 min</span>
+            <span class="tl-chip">Free pull-off</span>
           </div>
-          <div class="tl-time">11:15 - 12:00 PM</div>
-          <div class="tl-title">Drive Oswald West -> Astoria</div>
+        </div>
+        <div class="tl-item drive">
+          <div class="tl-time">11:15 - 12:05 PM</div>
+          <div class="tl-title">Drive Neahkahnie -> Astoria</div>
           <div class="tl-body">Back north on US-101 through Cannon Beach (don't stop) and Seaside, into Astoria - Oregon's oldest city, perched at the mouth of the Columbia. Quick stop at the Astoria Column for a 360-degree view if time allows.</div>
           <div class="tl-meta">
             <span class="tl-chip drive">35 mi · 45 min</span>
             <span class="tl-chip">US-101 N</span>
           </div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Astoria%2C_OR_from_the_Astoria_Column.jpg/1920px-Astoria%2C_OR_from_the_Astoria_Column.jpg"
-             data-caption-name="Buoy Beer / Bowpicker"
-             data-caption-loc="Astoria waterfront · 12:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Astoria%2C_OR_from_the_Astoria_Column.jpg/1920px-Astoria%2C_OR_from_the_Astoria_Column.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Buoy Beer / Bowpicker</div>
-              <div class="tl-photo-loc">Astoria waterfront · 12:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">12:00 - 1:00 PM</div>
           <div class="tl-title">Lunch in Astoria: <a href="https://buoybeer.com/" target="_blank" rel="noopener">Buoy Beer Co.</a> or <a href="https://bowpicker.com/" target="_blank" rel="noopener">Bowpicker Fish & Chips</a></div>
           <div class="tl-body">Buoy Beer is in a renovated cannery directly over the water - sea lions usually visible through the glass-floor panel. Bowpicker is a converted fishing boat parked downtown serving the best beer-battered albacore tuna anywhere. Either choice, a Goonies-pilgrimage detour is optional.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Astoria-Megler_Bridge_heading_north_01.JPG/1920px-Astoria-Megler_Bridge_heading_north_01.JPG"
-             data-caption-name="Astoria-Megler Bridge"
-             data-caption-loc="Crossing into Washington · 5 mi">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Astoria-Megler_Bridge_heading_north_01.JPG/1920px-Astoria-Megler_Bridge_heading_north_01.JPG');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Astoria-Megler Bridge</div>
-              <div class="tl-photo-loc">Crossing into Washington · 5 mi</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">1:15 - 1:35 PM</div>
           <div class="tl-title">Cross <a href="https://en.wikipedia.org/wiki/Astoria%E2%80%93Megler_Bridge" target="_blank" rel="noopener">Astoria-Megler Bridge</a> into Washington</div>
           <div class="tl-body">Four miles of two-lane bridge across the mouth of the Columbia - the longest continuous truss bridge in North America. On a clear day the views are spectacular. Welcome to Washington.</div>
@@ -2002,16 +1707,7 @@
             <span class="tl-chip drive">5 mi · 20 min</span>
           </div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/5f/2022-02-13%2C_Cape_Disappointment_Lighhouse%2C_02.jpg"
-             data-caption-name="Cape Disappointment Lighthouse"
-             data-caption-loc="Long Beach Peninsula · 1:45 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/5f/2022-02-13%2C_Cape_Disappointment_Lighhouse%2C_02.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Cape Disappointment Lighthouse</div>
-              <div class="tl-photo-loc">Long Beach Peninsula · 1:45 PM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">1:45 - 3:00 PM</div>
           <div class="tl-title"><a href="https://parks.wa.gov/find-parks/state-parks/cape-disappointment-state-park" target="_blank" rel="noopener">Cape Disappointment State Park</a></div>
           <div class="tl-body">Two lighthouses, the Lewis & Clark Interpretive Center perched on a cliff above the bar where the Columbia meets the Pacific, and an extremely dramatic view of breakers crashing on the jetty. Walk the easy 0.6-mile trail to North Head Lighthouse for the photo. <strong>$10 Discover Pass per day</strong> (or $30 annual; valid all week in WA state parks).</div>
@@ -2020,93 +1716,36 @@
             <span class="tl-chip">Lewis & Clark</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/LongBeachWA.jpg/1920px-LongBeachWA.jpg"
-             data-caption-name="US-101 N along Willapa Bay"
-             data-caption-loc="130 mi · 2h 30m">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/LongBeachWA.jpg/1920px-LongBeachWA.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">US-101 N along Willapa Bay</div>
-              <div class="tl-photo-loc">130 mi · 2h 30m</div>
-            </div>
-          </div>
-          <div class="tl-time">3:15 - 5:45 PM</div>
-          <div class="tl-title">Drive Cape Disappointment -> Kalaloch</div>
-          <div class="tl-body">North on US-101 along Willapa Bay, then through Aberdeen and Hoquiam (where Kurt Cobain grew up). Past Lake Quinault into the southern edge of Olympic National Park, where the highway hugs the Pacific for the first time in 50 miles. The road feels like the edge of the world.</div>
+        <div class="tl-item drive">
+          <div class="tl-time">3:15 - 6:15 PM</div>
+          <div class="tl-title">Drive Cape Disappointment -> La Push</div>
+          <div class="tl-body">North on US-101 along Willapa Bay, then through Aberdeen and Hoquiam (where Kurt Cobain grew up). Past Lake Quinault into the southern edge of Olympic National Park where the highway hugs the Pacific for the first time, past Kalaloch, then Forks (yes, the Twilight one - keep driving), then 14 mi west on La Push Rd to the village. The road feels like the edge of the world.</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">130 mi · 2h 30m</span>
-            <span class="tl-chip">US-101 N</span>
+            <span class="tl-chip drive">155 mi · 3h</span>
+            <span class="tl-chip">US-101 N + La Push Rd</span>
           </div>
         </div>
-        <div class="tl-item hotel"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kalaloch_Lodge_01.jpg/1920px-Kalaloch_Lodge_01.jpg"
-             data-caption-name="Kalaloch Lodge - Bluff Cabin"
-             data-caption-loc="Olympic NP coast · Check-in 6:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kalaloch_Lodge_01.jpg/1920px-Kalaloch_Lodge_01.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Kalaloch Lodge - Bluff Cabin</div>
-              <div class="tl-photo-loc">Olympic NP coast · Check-in 6:00 PM</div>
-            </div>
-          </div>
-          <div class="tl-time">6:00 PM</div>
-          <div class="tl-title">Check in at <a href="https://www.thekalalochlodge.com/" target="_blank" rel="noopener">Kalaloch Lodge - Bluff Cabin</a></div>
-          <div class="tl-body">The only oceanfront lodging in Olympic National Park. Individual cedar-shingle cabins line a 100-foot bluff directly above the Pacific - private deck, wood stove, no TV. Open the door, step onto the deck, and the only thing between you and the horizon is fog and seabirds. Ruby Beach is 8 miles north, Beach 4 is 3 miles north, the Hoh Rainforest is 50 miles east. Book the Bluff Cabin specifically (Main Lodge rooms are inland). ~$285/night.<br/><br/>Lake Quinault Lodge (35 mi south, $295) is the historic-lodge alternative, but no ocean view and an extra hour of driving each way to reach the coast.</div>
+        <div class="tl-item hotel">
+          <div class="tl-time">6:15 PM</div>
+          <div class="tl-title">Check in at <a href="https://www.quileuteoceanside.com/" target="_blank" rel="noopener">Quileute Oceanside Resort</a> - Oceanfront Cabin</div>
+          <div class="tl-body">22 mi north of Kalaloch in La Push (Quileute tribal village at the mouth of the Quillayute River). Oceanfront cabins sit directly on First Beach - sea stacks, driftwood, James Island offshore. Simple but well-equipped: kitchen, fireplace, ocean-facing deck. <strong>Reality check:</strong> Kalaloch Lodge's Bluff Cabin (the more famous in-park option) runs $600/night peak summer per Reddit + TripAdvisor reports - way over budget. Quileute is the genuine oceanfront-cabin experience for ~$265-285. Hoh Rainforest is 18 mi from here vs 50 mi from Kalaloch.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg"
-             data-caption-name="Ruby Beach approach"
-             data-caption-loc="8 mi · 12 min">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Ruby Beach approach</div>
-              <div class="tl-photo-loc">8 mi · 12 min</div>
-            </div>
-          </div>
-          <div class="tl-time">6:30 - 6:45 PM</div>
-          <div class="tl-title">Drive to <a href="https://www.nps.gov/olym/planyourvisit/visiting-the-coast.htm" target="_blank" rel="noopener">Ruby Beach</a> for sunset</div>
-          <div class="tl-body">Eight miles north on US-101.</div>
+        <div class="tl-item meal">
+          <div class="tl-time">7:00 PM</div>
+          <div class="tl-title">Dinner at <a href="https://www.quileuteoceanside.com/dining/" target="_blank" rel="noopener">River's Edge Restaurant</a></div>
+          <div class="tl-body">On-site restaurant overlooking the Quillayute River and First Beach. Simple PNW menu - salmon, fry bread, fish & chips - nothing fancy. Closes around 9 PM. Or grab burgers from a Forks cafe (15 min back) and bring back to the cabin.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">8:30 - 9:30 PM</div>
+          <div class="tl-title">Sunset on First Beach</div>
+          <div class="tl-body">Walk straight out the cabin door onto First Beach. James Island sits 1/4 mile offshore, and the sea stacks south of the river mouth catch the last sun. Sunset ~9:05 PM in mid-July gives you a long golden hour. Beach fires are legal here - bring wood. Tomorrow we'll see Ruby Beach in morning light on the way to the Hoh.</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">8 mi · 12 min</span>
+            <span class="tl-chip">Steps from cabin</span>
+            <span class="tl-chip">Beach fires OK</span>
           </div>
-        </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg"
-             data-caption-name="Ruby Beach at golden hour"
-             data-caption-loc="Olympic NP · sunset 8:09 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Ruby Beach at golden hour</div>
-              <div class="tl-photo-loc">Olympic NP · sunset ~9:05 PM</div>
-            </div>
-          </div>
-          <div class="tl-time">6:45 - 9:15 PM</div>
-          <div class="tl-title">Ruby Beach at golden hour</div>
-          <div class="tl-body">The signature beach of Olympic National Park. Sea stacks scattered across grey-pink sand, driftwood logs the size of train cars, the Hoh River meeting the Pacific in a wide pebble fan. Easy 0.2-mile walk down from the parking lot. Sunset is ~9:05 PM in mid-July - so we get a long, slow golden hour. Bring a jacket - it'll be 55F by sundown.</div>
-          <div class="tl-meta">
-            <span class="tl-chip hike">0.5 mi · 80 ft · easy</span>
-            <span class="tl-chip">Olympic NP</span>
-          </div>
-        </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg"
-             data-caption-name="Creekside Restaurant"
-             data-caption-loc="Kalaloch Lodge · 9:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Creekside Restaurant</div>
-              <div class="tl-photo-loc">Kalaloch Lodge · 9:00 PM</div>
-            </div>
-          </div>
-          <div class="tl-time">9:00 PM</div>
-          <div class="tl-title">Late dinner: <a href="https://www.thekalalochlodge.com/dine/" target="_blank" rel="noopener">Creekside Restaurant</a> at Kalaloch</div>
-          <div class="tl-body">Creekside is the lodge's main restaurant - timber-and-glass room overlooking the bluff and the Pacific. PNW menu: salmon, Dungeness, locally-foraged mushrooms. Reservations recommended in summer (call the lodge directly). After dinner, walk back to the cabin and listen to the surf.</div>
         </div>
       </div>
-      <div class="day-summary">
-          <div class="row"><span class="k">Driving today</span><span class="v">230 mi · 4h 45m</span></div>
-          <div class="row"><span class="k">Activities</span><span class="v">3 (Cape Falcon, Cape Disappointment, Ruby Beach)</span></div>
-          <div class="row"><span class="k">Hotel</span><span class="v">Kalaloch Lodge, Olympic NP</span></div>
-        </div>
+
     </div>
   </div>
 </section>
@@ -2131,52 +1770,46 @@
         </div>
       </div>
     </div>
+    <div class="day-summary">
+          <div class="row"><span class="k">Driving today</span><span class="v">110 mi · 3h 30m</span></div>
+          <div class="row"><span class="k">Activities</span><span class="v">4 (Hoh, Beach 4, Quinault, big spruce)</span></div>
+          <div class="row"><span class="k">Hotel</span><span class="v">Kalaloch Lodge (night 2)</span></div>
+        </div>
 
     <div class="timeline">
       <div class="timeline-rail">
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg"
-             data-caption-name="Breakfast at the lodge"
-             data-caption-loc="Lake Quinault · 7:30 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Breakfast at the lodge</div>
-              <div class="tl-photo-loc">Lake Quinault · 7:30 AM</div>
-            </div>
-          </div>
-          <div class="tl-time">7:30 AM</div>
-          <div class="tl-title">Breakfast at the lodge</div>
-          <div class="tl-body">Hot breakfast at Creekside, or grab a to-go from the Mercantile. Pack a sandwich-sized lunch - the rainforest has no facilities.</div>
+        <div class="tl-item meal">
+          <div class="tl-time">7:00 AM</div>
+          <div class="tl-title">Coffee on the deck + breakfast in the cabin</div>
+          <div class="tl-body">Cabin has a kitchen - cook breakfast and have it on the ocean-facing deck. The Quileute Mercantile (5 min walk) sells coffee and breakfast burritos. Pack a sandwich-sized lunch - the rainforest has no facilities.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/3/35/BIG_LEAF_MAPLES_HOH.jpg"
-             data-caption-name="Up the Hoh River Road"
-             data-caption-loc="48 mi · 1h 30m · no signal">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/35/BIG_LEAF_MAPLES_HOH.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Up the Hoh River Road</div>
-              <div class="tl-photo-loc">48 mi · 1h 30m · no signal</div>
-            </div>
-          </div>
-          <div class="tl-time">8:30 - 10:00 AM</div>
-          <div class="tl-title">Drive to <a href="https://www.nps.gov/olym/planyourvisit/visiting-the-hoh.htm" target="_blank" rel="noopener">Hoh Rainforest Visitor Center</a></div>
-          <div class="tl-body">North on US-101 about 30 miles to the Upper Hoh Road, then 18 miles east into the park. The Upper Hoh Road is paved but slow - you'll lose cell signal somewhere around mile 5 and not regain it until you leave. <strong>National Park entry fee $30/vehicle</strong> at the ranger station; America the Beautiful pass works.</div>
+        <div class="tl-item drive">
+          <div class="tl-time">8:00 - 8:50 AM</div>
+          <div class="tl-title">Drive La Push -> <a href="https://www.nps.gov/olym/planyourvisit/visiting-the-coast.htm" target="_blank" rel="noopener">Ruby Beach</a></div>
+          <div class="tl-body">East out of La Push, south on US-101 about 33 miles. Cool morning light on the sea stacks; far fewer people than the sunset crowd.</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">48 mi · 1h 30m</span>
+            <span class="tl-chip drive">38 mi · 50 min</span>
+          </div>
+        </div>
+        <div class="tl-item hike">
+          <div class="tl-time">8:50 - 10:00 AM</div>
+          <div class="tl-title">Ruby Beach</div>
+          <div class="tl-body">The signature beach of Olympic National Park. Sea stacks scattered across grey-pink sand, driftwood logs the size of train cars, the Hoh River meeting the Pacific in a wide pebble fan. Easy 0.2-mile walk down from the parking lot. Walk south to the river mouth and back.</div>
+          <div class="tl-meta">
+            <span class="tl-chip hike">0.5 mi · 80 ft · easy</span>
+          </div>
+        </div>
+        <div class="tl-item drive">
+          <div class="tl-time">10:00 - 11:00 AM</div>
+          <div class="tl-title">Drive Ruby Beach -> <a href="https://www.nps.gov/olym/planyourvisit/visiting-the-hoh.htm" target="_blank" rel="noopener">Hoh Rainforest Visitor Center</a></div>
+          <div class="tl-body">North on US-101 about 14 miles to the Upper Hoh Road, then 18 miles east into the park. The Upper Hoh Road is paved but slow - you'll lose cell signal somewhere around mile 5 and not regain it until you leave. <strong>National Park entry fee $30/vehicle</strong> at the ranger station; America the Beautiful pass works.</div>
+          <div class="tl-meta">
+            <span class="tl-chip drive">32 mi · 1h</span>
             <span class="tl-chip">No cell signal</span>
           </div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/3/35/BIG_LEAF_MAPLES_HOH.jpg"
-             data-caption-name="Hall of Mosses Trail"
-             data-caption-loc="Hoh Rainforest · 0.8 mi loop">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/35/BIG_LEAF_MAPLES_HOH.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Hall of Mosses Trail</div>
-              <div class="tl-photo-loc">Hoh Rainforest · 0.8 mi loop</div>
-            </div>
-          </div>
-          <div class="tl-time">10:15 - 11:30 AM</div>
+        <div class="tl-item hike">
+          <div class="tl-time">11:15 AM - 12:30 PM</div>
           <div class="tl-title"><a href="https://www.alltrails.com/trail/us/washington/hall-of-mosses" target="_blank" rel="noopener">Hall of Mosses Trail</a></div>
           <div class="tl-body">A 0.8-mile loop through the most postcard-perfect old-growth forest in North America. Bigleaf maples draped in club moss, Sitka spruces 250 feet tall, every surface furred green. Quiet enough you can hear water dripping off leaves. The trail is gentle, mostly flat, with one short rise.</div>
           <div class="tl-meta">
@@ -2184,64 +1817,28 @@
             <span class="tl-chip">Crown jewel</span>
           </div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/3/35/BIG_LEAF_MAPLES_HOH.jpg"
-             data-caption-name="Spruce Nature Trail"
-             data-caption-loc="Hoh Rainforest · 1.2 mi loop">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/35/BIG_LEAF_MAPLES_HOH.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Spruce Nature Trail</div>
-              <div class="tl-photo-loc">Hoh Rainforest · 1.2 mi loop</div>
-            </div>
-          </div>
-          <div class="tl-time">11:30 AM - 12:30 PM</div>
+        <div class="tl-item hike">
+          <div class="tl-time">12:30 - 1:30 PM</div>
           <div class="tl-title"><a href="https://www.alltrails.com/trail/us/washington/spruce-nature-trail" target="_blank" rel="noopener">Spruce Nature Trail</a> (optional)</div>
           <div class="tl-body">If you have the energy, the Spruce Nature Trail (1.2 miles) starts at the same trailhead and loops along the Hoh River through younger forest. Different feel than Hall of Mosses, equally beautiful, much fewer people.</div>
           <div class="tl-meta">
             <span class="tl-chip hike">1.2 mi · flat · easy</span>
           </div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/3/35/BIG_LEAF_MAPLES_HOH.jpg"
-             data-caption-name="Hoh Visitor Center picnic"
-             data-caption-loc="12:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/35/BIG_LEAF_MAPLES_HOH.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Hoh Visitor Center picnic</div>
-              <div class="tl-photo-loc">12:30 PM</div>
-            </div>
-          </div>
-          <div class="tl-time">12:30 PM</div>
+        <div class="tl-item meal">
+          <div class="tl-time">1:30 PM</div>
           <div class="tl-title">Picnic at the visitor center</div>
           <div class="tl-body">Tables outside the visitor center; or eat in the car if it's drizzling.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg"
-             data-caption-name="Back to the Pacific"
-             data-caption-loc="42 mi · 1h 25m">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Back to the Pacific</div>
-              <div class="tl-photo-loc">42 mi · 1h 25m</div>
-            </div>
-          </div>
-          <div class="tl-time">1:30 - 3:00 PM</div>
-          <div class="tl-title">Drive back to the coast: <a href="https://www.nps.gov/olym/planyourvisit/visiting-the-coast.htm" target="_blank" rel="noopener">Beach 4</a></div>
-          <div class="tl-body">West out of the Hoh, south on US-101 to Beach 4 trailhead (3 miles north of Kalaloch). Check NOAA the night before for the Jul 16 low-tide window and adjust departure from the Hoh accordingly - the goal is to be on the beach within 90 minutes of the morning low.</div>
+        <div class="tl-item drive">
+          <div class="tl-time">2:30 - 3:45 PM</div>
+          <div class="tl-title">Drive Hoh -> <a href="https://www.nps.gov/olym/planyourvisit/visiting-the-coast.htm" target="_blank" rel="noopener">Beach 4</a></div>
+          <div class="tl-body">West out of the Hoh, south on US-101 to Beach 4 trailhead (3 miles north of Kalaloch). Check NOAA the night before for the Jul 16 afternoon low-tide window. Today's tide may not align with our schedule; if not, we just walk the beach without tidepool focus.</div>
           <div class="tl-meta">
-            <span class="tl-chip drive">42 mi · 1h 25m</span>
+            <span class="tl-chip drive">38 mi · 1h 15m</span>
           </div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg"
-             data-caption-name="Beach 4 + Tree of Life"
-             data-caption-loc="Olympic NP · low tide 12:20 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Beach 4 + Tree of Life</div>
-              <div class="tl-photo-loc">Olympic NP · time tidepools to NOAA</div>
-            </div>
-          </div>
+        <div class="tl-item hike">
           <div class="tl-time">3:00 - 4:30 PM</div>
           <div class="tl-title">Beach 4 tidepools + Tree of Life</div>
           <div class="tl-body">Easy 0.4-mile gravel + driftwood scramble down to the beach. Beach 4 has some of the best tidepool exposure on the WA coast - giant green anemones, ochre sea stars, gumboot chitons, spectacular black-and-orange harlequin sponge. Walk south on the beach 0.5 miles toward Kalaloch and you'll find the famous "Tree of Life" - a Sitka spruce hanging suspended over a sea cave with all its roots exposed.</div>
@@ -2250,16 +1847,7 @@
             <span class="tl-chip">Marine garden</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg"
-             data-caption-name="Lake Quinault Rainforest"
-             data-caption-loc="20 mi · 30 min">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Lake Quinault Rainforest</div>
-              <div class="tl-photo-loc">20 mi · 30 min</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">4:45 - 5:15 PM</div>
           <div class="tl-title">Drive to <a href="https://www.fs.usda.gov/recarea/olympic/recarea/?recid=47845" target="_blank" rel="noopener">Lake Quinault Rainforest</a></div>
           <div class="tl-body">South on US-101 about 35 miles, into the Quinault rainforest. The road around Lake Quinault is one of the most beautiful drives in WA.</div>
@@ -2267,16 +1855,7 @@
             <span class="tl-chip drive">20 mi · 30 min</span>
           </div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg"
-             data-caption-name="World's largest Sitka spruce"
-             data-caption-loc="1,000-year-old · 191 ft tall">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">World's largest Sitka spruce</div>
-              <div class="tl-photo-loc">1,000-year-old · 191 ft tall</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">5:30 - 7:00 PM</div>
           <div class="tl-title">Lake Quinault Lodge + worlds-largest spruce <span style="font-weight: 400; font-size: 13px; color: var(--muted);">(optional)</span></div>
           <div class="tl-body">If you have the energy after Beach 4, drop into the historic Lake Quinault Lodge (1926, FDR slept here) for a drink on the lawn overlooking the lake. Then visit the World's Largest Sitka Spruce, a 1,000-year-old, 191-foot, 17-foot-diameter monster on a short signed trail nearby. Note this is 35 miles south of Kalaloch - skip it if the day's running long and grab beach fire time at the cabin instead.</div>
@@ -2284,42 +1863,20 @@
             <span class="tl-chip hike">0.3 mi · flat · easy</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg"
-             data-caption-name="Drive back to the lodge"
-             data-caption-loc="25 mi · 30 min">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_Quinault_Lodge.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Drive back to the lodge</div>
-              <div class="tl-photo-loc">25 mi · 30 min</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">7:00 - 7:30 PM</div>
           <div class="tl-title">Drive back to Kalaloch</div>
           <div class="tl-meta">
             <span class="tl-chip drive">25 mi · 30 min</span>
           </div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg"
-             data-caption-name="Beach fire at the bluff"
-             data-caption-loc="Sunset 8:07 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Beach fire at the bluff</div>
-              <div class="tl-photo-loc">Sunset ~9:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">8:00 PM</div>
           <div class="tl-title">Dinner: Creekside, then beach fire</div>
           <div class="tl-body">Dinner at the lodge; then a beach fire on the bluff. The lodge sells firewood; sunset around 9:00 PM in mid-July. The night sky here, on a clear night, is darker than almost anywhere on the West Coast.</div>
         </div>
       </div>
-      <div class="day-summary">
-          <div class="row"><span class="k">Driving today</span><span class="v">110 mi · 3h 30m</span></div>
-          <div class="row"><span class="k">Activities</span><span class="v">4 (Hoh, Beach 4, Quinault, big spruce)</span></div>
-          <div class="row"><span class="k">Hotel</span><span class="v">Kalaloch Lodge (night 2)</span></div>
-        </div>
+
     </div>
   </div>
 </section>
@@ -2344,47 +1901,25 @@
         </div>
       </div>
     </div>
+    <div class="day-summary">
+          <div class="row"><span class="k">Driving today</span><span class="v">175 mi · 4h 0m + ferry</span></div>
+          <div class="row"><span class="k">Activities</span><span class="v">4 (Marymere, Hurricane Ridge, ferry, Pike Place)</span></div>
+          <div class="row"><span class="k">Hotel</span><span class="v">Inn at the Market, Seattle</span></div>
+        </div>
 
     <div class="timeline">
       <div class="timeline-rail">
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kalaloch_Lodge_01.jpg/1920px-Kalaloch_Lodge_01.jpg"
-             data-caption-name="Last breakfast at the lodge"
-             data-caption-loc="Kalaloch · 7:00 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kalaloch_Lodge_01.jpg/1920px-Kalaloch_Lodge_01.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Last breakfast at the lodge</div>
-              <div class="tl-photo-loc">Kalaloch · 7:00 AM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">7:00 AM</div>
           <div class="tl-title">Breakfast at the lodge</div>
           <div class="tl-body">Hot breakfast at Creekside. Take a coffee onto the bluff for one last look at the Pacific.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kalaloch_Lodge_01.jpg/1920px-Kalaloch_Lodge_01.jpg"
-             data-caption-name="Check out, load car"
-             data-caption-loc="Departing Olympic NP">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kalaloch_Lodge_01.jpg/1920px-Kalaloch_Lodge_01.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Check out, load car</div>
-              <div class="tl-photo-loc">Departing Olympic NP</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">8:00 AM</div>
           <div class="tl-title">Check out, load car</div>
           <div class="tl-body">Big day, scenic drive, no doubling back.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/1/14/Forks_WA.jpg"
-             data-caption-name="North through Forks"
-             data-caption-loc="75 mi · 1h 30m · US-101 N">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/1/14/Forks_WA.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">North through Forks</div>
-              <div class="tl-photo-loc">75 mi · 1h 30m · US-101 N</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">8:15 - 9:45 AM</div>
           <div class="tl-title">Drive Kalaloch -> Lake Crescent</div>
           <div class="tl-body">North on US-101 through Forks (yes, the Twilight one - no need to stop), past the Hoh River, then the road climbs and curves around the western edge of the peninsula. Lake Crescent appears on your right - 624 feet deep, surrounded by old-growth, water so clear you can see 60 feet down.</div>
@@ -2393,16 +1928,7 @@
             <span class="tl-chip">US-101 N</span>
           </div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Lake_Crescent_spring.jpg/1920px-Lake_Crescent_spring.jpg"
-             data-caption-name="Marymere Falls Trail"
-             data-caption-loc="Lake Crescent · 1.8 mi">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Lake_Crescent_spring.jpg/1920px-Lake_Crescent_spring.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Marymere Falls Trail</div>
-              <div class="tl-photo-loc">Lake Crescent · 1.8 mi</div>
-            </div>
-          </div>
+        <div class="tl-item hike">
           <div class="tl-time">9:50 - 11:00 AM</div>
           <div class="tl-title"><a href="https://www.alltrails.com/trail/us/washington/marymere-falls" target="_blank" rel="noopener">Marymere Falls Trail</a></div>
           <div class="tl-body">An easy 1.8-mile out-and-back from the Storm King Ranger Station, through old-growth Doug-fir to a 90-foot waterfall in a deep mossy grotto. Mostly flat with a final short climb to two viewpoints. Refill water at the trailhead.</div>
@@ -2410,16 +1936,7 @@
             <span class="tl-chip hike">1.8 mi · 250 ft · easy</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/2/2b/Hurricane_Ridge_view.jpg"
-             data-caption-name="Climb to Hurricane Ridge"
-             data-caption-loc="45 mi · 1h 15m · 5,000 ft climb">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2b/Hurricane_Ridge_view.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Climb to Hurricane Ridge</div>
-              <div class="tl-photo-loc">45 mi · 1h 15m · 5,000 ft climb</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">11:15 - 12:30 PM</div>
           <div class="tl-title">Drive Lake Crescent -> Hurricane Ridge</div>
           <div class="tl-body">East on US-101 to Port Angeles, then south up the Hurricane Ridge Road - 17 miles of switchbacks climbing 5,000 feet from sea level to alpine. The road is paved and well-maintained but slow. <strong>$30 NP fee covered by Jul 16 entry; America the Beautiful works.</strong></div>
@@ -2428,30 +1945,12 @@
             <span class="tl-chip">Climb 5,000 ft</span>
           </div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/2/2b/Hurricane_Ridge_view.jpg"
-             data-caption-name="Hurricane Ridge"
-             data-caption-loc="Olympic NP · 12:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2b/Hurricane_Ridge_view.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Hurricane Ridge</div>
-              <div class="tl-photo-loc">Olympic NP · 12:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">12:30 - 1:15 PM</div>
           <div class="tl-title">Lunch + the view at <a href="https://www.nps.gov/olym/planyourvisit/visiting-hurricane-ridge.htm" target="_blank" rel="noopener">Hurricane Ridge</a></div>
           <div class="tl-body">The visitor center has a small cafe and picnic tables outside. From the deck, the entire Olympic Range spreads out south - jagged glacier-cut peaks (more snow in mid-July than later in summer), deer wandering the wildflower meadows in peak bloom. On clear days you can see north to Vancouver Island.</div>
         </div>
-        <div class="tl-item hike"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/2/2b/Hurricane_Ridge_view.jpg"
-             data-caption-name="Hurricane Hill Trail"
-             data-caption-loc="1 - 3 mi · 5,757 ft">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2b/Hurricane_Ridge_view.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Hurricane Hill Trail</div>
-              <div class="tl-photo-loc">1 - 3 mi · 5,757 ft</div>
-            </div>
-          </div>
+        <div class="tl-item hike">
           <div class="tl-time">1:30 - 2:30 PM</div>
           <div class="tl-title"><a href="https://www.alltrails.com/trail/us/washington/hurricane-hill-trail" target="_blank" rel="noopener">Hurricane Hill Trail</a> (or just the meadow loop)</div>
           <div class="tl-body">Hurricane Hill is a 3.2-mile out-and-back gaining 700 feet to a summit with 360-degree views. Or for less effort, walk the paved sub-1-mile Big Meadow / Cirque Rim loops directly behind the visitor center - flat, paved, accessible. Listen for marmots whistling.</div>
@@ -2460,16 +1959,7 @@
             <span class="tl-chip">Marmots + deer</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Lake_Crescent_spring.jpg/1920px-Lake_Crescent_spring.jpg"
-             data-caption-name="Down the peninsula"
-             data-caption-loc="65 mi · 1h 15m">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Lake_Crescent_spring.jpg/1920px-Lake_Crescent_spring.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Down the peninsula</div>
-              <div class="tl-photo-loc">65 mi · 1h 15m</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">2:45 - 4:00 PM</div>
           <div class="tl-title">Drive Hurricane Ridge -> Bainbridge Ferry Terminal</div>
           <div class="tl-body">Down the switchbacks (use low gear, save the brakes), east on US-101 along the Hood Canal, then south on WA-104 to WA-305 onto Bainbridge Island. <strong>Pro move:</strong> instead of driving 3+ hours through Tacoma, we ride the Bainbridge ferry directly into downtown Seattle.</div>
@@ -2478,15 +1968,7 @@
             <span class="tl-chip">Hood Canal Bridge</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Bainbridge -> Seattle ferry">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Bainbridge -> Seattle ferry</div>
-              <div class="tl-photo-loc">Puget Sound · 35 min crossing</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">4:30 - 5:05 PM</div>
           <div class="tl-title"><a href="https://wsdot.wa.gov/travel/washington-state-ferries/schedules/seattle-bainbridge-island" target="_blank" rel="noopener">Bainbridge -> Seattle ferry</a></div>
           <div class="tl-body">35-minute crossing of Puget Sound. Vehicles board direct from US-305 onto the boat. Get out of the car on the upper decks - the approach to downtown Seattle from the water at golden hour is one of the great American views. <strong>~$28 vehicle + driver, ~$10 each additional passenger</strong>; no reservation needed but lines can be 1 sailing in summer (sailings every 50 min).</div>
@@ -2495,54 +1977,23 @@
             <span class="tl-chip">WSF route</span>
           </div>
         </div>
-        <div class="tl-item hotel"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Inn_at_the_Market.jpg/1920px-Inn_at_the_Market.jpg"
-             data-caption-name="Inn at the Market"
-             data-caption-loc="Pike Place · Check-in 5:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Inn_at_the_Market.jpg/1920px-Inn_at_the_Market.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Inn at the Market</div>
-              <div class="tl-photo-loc">Pike Place · Check-in 5:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item hotel">
           <div class="tl-time">5:30 PM</div>
           <div class="tl-title">Check in at <a href="https://www.innatthemarket.com/" target="_blank" rel="noopener">Inn at the Market</a></div>
           <div class="tl-body">Roll off the ferry and the hotel is a 5-minute drive up Marion Street to Pike Place. A 76-room boutique literally <em>at</em> Pike Place Market - the rooftop deck overlooks Elliott Bay and the Olympics, the lobby smells like cedar. Valet parking ~$60/night. ~$340/night peak summer.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Inn at the Market rooftop"
-             data-caption-loc="6:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Inn at the Market rooftop</div>
-              <div class="tl-photo-loc">6:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">6:30 PM</div>
           <div class="tl-title">Drinks on the rooftop</div>
           <div class="tl-body">Public-access roof deck at the Inn at the Market, free, with one of the best views in the city. Bring a bottle from the Pike Place wine shop.</div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/b/b4/Pike_Place_Market.jpg"
-             data-caption-name="The Pink Door"
-             data-caption-loc="Post Alley · 8:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/b/b4/Pike_Place_Market.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">The Pink Door</div>
-              <div class="tl-photo-loc">Post Alley · 8:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">8:00 PM</div>
           <div class="tl-title">Dinner: <a href="https://www.thepinkdoor.net/" target="_blank" rel="noopener">The Pink Door</a></div>
           <div class="tl-body">Theatrical Italian down Post Alley (no sign on the door), with a trapeze artist over your table on weekends. Book weeks ahead. Or for a quieter pick: Matt's in the Market - 9-table window-on-the-market dinner spot, PNW seafood-forward.</div>
         </div>
       </div>
-      <div class="day-summary">
-          <div class="row"><span class="k">Driving today</span><span class="v">175 mi · 4h 0m + ferry</span></div>
-          <div class="row"><span class="k">Activities</span><span class="v">4 (Marymere, Hurricane Ridge, ferry, Pike Place)</span></div>
-          <div class="row"><span class="k">Hotel</span><span class="v">Inn at the Market, Seattle</span></div>
-        </div>
+
     </div>
   </div>
 </section>
@@ -2566,33 +2017,20 @@
         </div>
       </div>
     </div>
+    <div class="day-summary">
+          <div class="row"><span class="k">Driving today</span><span class="v">0 mi · walking day</span></div>
+          <div class="row"><span class="k">Activities</span><span class="v">4 (Pike Place, waterfront, ferry/Needle, dinner)</span></div>
+          <div class="row"><span class="k">Hotel</span><span class="v">Inn at the Market (night 2)</span></div>
+        </div>
 
     <div class="timeline">
       <div class="timeline-rail">
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Lowell%27s_Restaurant.jpg/1280px-Lowell%27s_Restaurant.jpg"
-             data-caption-name="Lowell's Restaurant"
-             data-caption-loc="Pike Place Market · 8:00 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Lowell%27s_Restaurant.jpg/1280px-Lowell%27s_Restaurant.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Lowell's Restaurant</div>
-              <div class="tl-photo-loc">Pike Place Market · 8:00 AM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">8:00 AM</div>
           <div class="tl-title">Breakfast at <a href="https://eatatlowells.com/" target="_blank" rel="noopener">Lowell's</a></div>
           <div class="tl-body">3-floor diner inside Pike Place Market with floor-to-ceiling windows on Elliott Bay. Get a window table for the eggs Benedict. Or for biscuits, try <a href="https://biscuitbitch.com/" target="_blank" rel="noopener">Biscuit Bitch</a> a few blocks up.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Pike_Place_Fish_Co.jpg/1280px-Pike_Place_Fish_Co.jpg"
-             data-caption-name="Pike Place Fish Co."
-             data-caption-loc="9:00 - 11:00 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Pike_Place_Fish_Co.jpg/1280px-Pike_Place_Fish_Co.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Pike Place Fish Co.</div>
-              <div class="tl-photo-loc">9:00 - 11:00 AM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">9:00 - 11:00 AM</div>
           <div class="tl-title"><a href="https://www.pikeplacemarket.org/" target="_blank" rel="noopener">Pike Place Market</a> deep-dive</div>
           <div class="tl-body">Saturday morning at Pike Place is peak chaos in the best way - flying fish at Pike Place Fish Co., buskers at every corner, the original Starbucks (skip the line, the new ones make better coffee), Beecher's mac & cheese watch-it-being-made, the Gum Wall in Post Alley. Pick up a bouquet from one of the flower stalls.</div>
@@ -2601,16 +2039,7 @@
             <span class="tl-chip">Crowded by 11 AM</span>
           </div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Olympic Sculpture Park"
-             data-caption-loc="Elliott Bay waterfront · 11:00 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Olympic Sculpture Park</div>
-              <div class="tl-photo-loc">Elliott Bay waterfront · 11:00 AM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">11:00 - 12:30 PM</div>
           <div class="tl-title">Waterfront + <a href="https://www.seattleartmuseum.org/visit/olympic-sculpture-park" target="_blank" rel="noopener">Olympic Sculpture Park</a></div>
           <div class="tl-body">Take the Pike Place Hillclimb stairs down to the new waterfront promenade (just opened in 2025 after a decade of construction - it's spectacular). Walk north 15 minutes to the Olympic Sculpture Park, a free outdoor branch of the Seattle Art Museum on a hill above Elliott Bay. Richard Serra, Alexander Calder, Louise Bourgeois.</div>
@@ -2619,82 +2048,33 @@
             <span class="tl-chip">Free</span>
           </div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/b/b4/Pike_Place_Market.jpg"
-             data-caption-name="Pike Place picnic"
-             data-caption-loc="Lunch · 12:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/b/b4/Pike_Place_Market.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Pike Place picnic</div>
-              <div class="tl-photo-loc">Lunch · 12:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">12:30 - 1:30 PM</div>
           <div class="tl-title">Lunch: Storyville Coffee + Pike Place picnic</div>
           <div class="tl-body">Pick up Beecher's mac & cheese, a sandwich from Bavarian Meats, fruit from the produce stalls, and find a bench overlooking Elliott Bay.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Bainbridge ferry round-trip"
-             data-caption-loc="Afternoon · 2:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Bainbridge ferry round-trip</div>
-              <div class="tl-photo-loc">Afternoon · 2:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">2:00 - 4:30 PM</div>
           <div class="tl-title"><a href="https://wsdot.wa.gov/travel/washington-state-ferries/schedules/seattle-bainbridge-island" target="_blank" rel="noopener">Bainbridge ferry round-trip</a></div>
           <div class="tl-body">Walk-on the Bainbridge ferry at Coleman Dock. 35 minutes each way. Spend an hour on Bainbridge Island browsing Winslow Way, then ferry back. ~$10/pp walk-on, magnificent views both directions.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Inn_at_the_Market.jpg/1920px-Inn_at_the_Market.jpg"
-             data-caption-name="Roof deck at sunset"
-             data-caption-loc="Inn at the Market · 5:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Inn_at_the_Market.jpg/1920px-Inn_at_the_Market.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Roof deck at sunset</div>
-              <div class="tl-photo-loc">Inn at the Market · 5:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">5:00 - 6:30 PM</div>
           <div class="tl-title">Rest at the hotel + roof deck drinks</div>
           <div class="tl-body">Back to the room for a hot shower and a nap before dinner. Sunset is around 8:55 PM tonight - take a glass up to the roof deck around 8 for the light on the Olympics. Tomorrow morning is a 4:30 AM wake-up, so don't push too late.</div>
         </div>
-        <div class="tl-item meal"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Canlis or Matt's in the Market"
-             data-caption-loc="Seattle splurge · 8:00 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Canlis or Matt's in the Market</div>
-              <div class="tl-photo-loc">Seattle splurge · 8:00 PM</div>
-            </div>
-          </div>
+        <div class="tl-item meal">
           <div class="tl-time">8:00 PM</div>
           <div class="tl-title">Dinner: <a href="https://canlis.com/" target="_blank" rel="noopener">Canlis</a> (splurge) or <a href="https://mattsinthemarket.com/" target="_blank" rel="noopener">Matt's in the Market</a></div>
           <div class="tl-body">Canlis is the Seattle splurge - 75-year-old hilltop fine dining with a window-wall view of Lake Union and the Cascades. Multi-course, ~$160/pp. Reserve weeks ahead. <br/><br/>Or stay close to home: Matt's in the Market is a 9-table window-on-the-market PNW spot, more casual, also excellent.</div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Pike_Place_Market_Seattle.jpg/3840px-Pike_Place_Market_Seattle.jpg"
-             data-caption-name="Pike Place by night"
-             data-caption-loc="10:30 PM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Pike_Place_Market_Seattle.jpg/3840px-Pike_Place_Market_Seattle.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Pike Place by night</div>
-              <div class="tl-photo-loc">10:30 PM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">10:30 PM</div>
           <div class="tl-title">Walk Pike Place by night</div>
           <div class="tl-body">After dinner, the market empties out and is genuinely beautiful - empty stalls, fairy lights, fog rolling off the Sound. End the trip with a slow walk back to the hotel.</div>
         </div>
       </div>
-      <div class="day-summary">
-          <div class="row"><span class="k">Driving today</span><span class="v">0 mi · walking day</span></div>
-          <div class="row"><span class="k">Activities</span><span class="v">4 (Pike Place, waterfront, ferry/Needle, dinner)</span></div>
-          <div class="row"><span class="k">Hotel</span><span class="v">Inn at the Market (night 2)</span></div>
-        </div>
+
     </div>
   </div>
 </section>
@@ -2717,33 +2097,20 @@
         </div>
       </div>
     </div>
+    <div class="day-summary">
+          <div class="row"><span class="k">Driving today</span><span class="v">15 mi · 25 min</span></div>
+          <div class="row"><span class="k">Flights</span><span class="v">DL 739 + DL 4027 · via AUS</span></div>
+          <div class="row"><span class="k">Home in IND</span><span class="v">5:47 PM ET</span></div>
+        </div>
 
     <div class="timeline">
       <div class="timeline-rail">
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Inn_at_the_Market.jpg/1920px-Inn_at_the_Market.jpg"
-             data-caption-name="Wake up at Inn at the Market"
-             data-caption-loc="Last morning · 4:30 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Inn_at_the_Market.jpg/1920px-Inn_at_the_Market.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Wake up at Inn at the Market</div>
-              <div class="tl-photo-loc">Last morning · 4:30 AM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">4:30 AM</div>
           <div class="tl-title">Alarm. Pack the car.</div>
           <div class="tl-body">Bags should be by the door from last night. Express check-out at the front desk - no need to settle in person, the inn emails the folio. Out the door by 5:00.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Drive to SEA-TAC"
-             data-caption-loc="15 mi · 25 min · empty I-5">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Drive to SEA-TAC</div>
-              <div class="tl-photo-loc">15 mi · 25 min · empty I-5</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">5:00 - 5:25 AM</div>
           <div class="tl-title">Drive to <a href="https://www.portseattle.org/sea-tac/parking/rental-car-facility" target="_blank" rel="noopener">SEA-TAC</a> + return rental</div>
           <div class="tl-body">South on I-5 to SR-518. Sunday at 5 AM, the freeway is yours. SEA's Rental Car Facility is a 5-minute shuttle from the terminal - the shuttle runs 24/7 every 5-10 minutes.</div>
@@ -2751,30 +2118,12 @@
             <span class="tl-chip drive">15 mi · 25 min</span>
           </div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Sea-Tac · Delta counter"
-             data-caption-loc="Bag drop · 6:00 AM">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Sea-Tac · Delta counter</div>
-              <div class="tl-photo-loc">Bag drop · 6:00 AM</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">6:00 - 6:30 AM</div>
           <div class="tl-title">Check in + clear security</div>
           <div class="tl-body">Delta counters are on the upper level on the south end. Bags should be checked through to IND on a single Delta itinerary - confirm at the counter. Pre-Check on Delta runs in Concourse A. Grab a coffee and a quick breakfast on the way to the gate; SEA airside food opens at 5 AM.</div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Delta 739 · SEA -> AUS"
-             data-caption-loc="7:15 AM - 1:26 PM (CT)">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Delta 739 · SEA -> AUS</div>
-              <div class="tl-photo-loc">7:15 AM - 1:26 PM (CT)</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">7:15 AM - 1:26 PM CT</div>
           <div class="tl-title">Delta 739 · SEA -> AUS</div>
           <div class="tl-body">~4h 11m flight (departs 7:15 AM PT, arrives 1:26 PM CT). Delta Main Basic - no seat selection until check-in.</div>
@@ -2783,16 +2132,7 @@
             <span class="tl-chip">+2h time change (PT -> CT)</span>
           </div>
         </div>
-        <div class="tl-item"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Austin layover"
-             data-caption-loc="AUS · 37 minutes">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Austin layover</div>
-              <div class="tl-photo-loc">AUS · 37 minutes</div>
-            </div>
-          </div>
+        <div class="tl-item">
           <div class="tl-time">1:26 - 2:03 PM CT</div>
           <div class="tl-title">Connect at Austin (AUS)</div>
           <div class="tl-body">Tight 37-minute layover. AUS is a single-terminal airport - usually just a quick walk between Delta gates. Bags are checked through; just hustle to the next gate. If the SEA leg is delayed, Delta's Sky Club rebooking desk is in the same terminal.</div>
@@ -2800,16 +2140,7 @@
             <span class="tl-chip">37 min connection</span>
           </div>
         </div>
-        <div class="tl-item drive"
-             data-img="https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg"
-             data-caption-name="Delta 4027 · AUS -> IND"
-             data-caption-loc="2:03 - 5:47 PM ET">
-          <div class="tl-photo" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/58/Seattle_Center_as_night_falls.jpg');">
-            <div class="tl-photo-cap">
-              <div class="tl-photo-name">Delta 4027 · AUS -> IND</div>
-              <div class="tl-photo-loc">2:03 - 5:47 PM ET</div>
-            </div>
-          </div>
+        <div class="tl-item drive">
           <div class="tl-time">2:03 PM CT - 5:47 PM ET</div>
           <div class="tl-title">Delta 4027 · AUS -> IND</div>
           <div class="tl-body">~2h 44m flight (departs 2:03 PM CT, arrives 5:47 PM ET). Operated as a regional connection - typically an Embraer 175. Home in Indy by dinner.</div>
@@ -2819,11 +2150,7 @@
           </div>
         </div>
       </div>
-      <div class="day-summary">
-          <div class="row"><span class="k">Driving today</span><span class="v">15 mi · 25 min</span></div>
-          <div class="row"><span class="k">Flights</span><span class="v">DL 739 + DL 4027 · via AUS</span></div>
-          <div class="row"><span class="k">Home in IND</span><span class="v">5:47 PM ET</span></div>
-        </div>
+
     </div>
   </div>
 </section>
@@ -2834,18 +2161,18 @@
     <div class="section-head">
       <div class="section-eyebrow">Where we sleep</div>
       <h2>Four hotels, <em>all under $300, all with the view</em>.</h2>
-      <p class="lede">View-first picks, all under your $300 target. Two are slightly outside the marquee town (Tolovana Park is 1.5 mi south of Cannon Beach village; Kalaloch is 35 mi north of Lake Quinault) but each has a far better view than the more central in-town options. Verify exact rates for Jul 12-19 when booking - mid-July is peak season and prices fluctuate. Kalaloch Bluff Cabins book out 6+ months ahead.</p>
+      <p class="lede">View-first picks based on aggregator pricing data (KAYAK / Momondo / TripAdvisor / Google Hotels) for the actual Jul 12-19 dates. <strong>Important reality check:</strong> Kalaloch Lodge's Bluff Cabin is ~$600/night peak summer (way over budget) - so we're staying down the coast at Ocean Crest Resort in Moclips (50 mi south, $160-200) where rooms have a cliff-top view across the entire Pacific from a 100-ft bluff. We trade "oceanfront inside the park" for "actual view, half the price, 1-hour drive to the Hoh." All four picks confirmed available under $300 mid-July. Verify exact rates when booking.</p>
     </div>
 
     <div class="hotels">
-      <a class="hotel" href="https://westcliff-lodge.com/" target="_blank" rel="noopener">
-        <div class="hotel-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3d/Hood_River_OR_-_aerial.jpg');"></div>
+      <a class="hotel" href="https://www.skamania.com/" target="_blank" rel="noopener">
+        <div class="hotel-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3d/I-84_in_Columbia_Gorge_%284332509155%29.jpg');"></div>
         <div class="hotel-body">
-          <div class="hotel-loc">Hood River · 1 night</div>
-          <div class="hotel-name">Westcliff Lodge</div>
-          <div class="hotel-meta">Best gorge view in Hood River. Built 1908, perched directly on the basalt cliff edge above the Columbia. Most rooms face the river straight down 250 feet. Family-owned, hot tub, big lawn, private cliff trail down to the water. 4.5/5 with 920+ reviews. The Columbia Gorge Hotel is fancier (and ~$310) but Westcliff actually has the better drop-off-cliff view and runs ~30% less.</div>
-          <div class="hotel-price">$199 <small>/ night</small></div>
-          <div class="hotel-nights">1 night · ~$220 total inc. tax</div>
+          <div class="hotel-loc">Stevenson, WA · 1 night · BOOKED</div>
+          <div class="hotel-name">Skamania Lodge</div>
+          <div class="hotel-meta">254-room cedar-and-stone lodge on a forested bluff above the Columbia River, set on 175 acres just east of the Bridge of the Gods. Massive timber-framed Great Hall with 60-foot stone fireplace, full-service spa, golf course, hot tub, zipline + treehouses on property. Cascade Dining Room serves PNW-forward dinner with floor-to-ceiling gorge windows.</div>
+          <div class="hotel-price">$467.26 <small>/ night</small></div>
+          <div class="hotel-nights">1 night · $467.26 total · BOOKED</div>
         </div>
       </a>
 
@@ -2860,12 +2187,12 @@
         </div>
       </a>
 
-      <a class="hotel" href="https://www.thekalalochlodge.com/" target="_blank" rel="noopener">
-        <div class="hotel-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kalaloch_Lodge_01.jpg/1920px-Kalaloch_Lodge_01.jpg');"></div>
+      <a class="hotel" href="https://www.quileuteoceanside.com/" target="_blank" rel="noopener">
+        <div class="hotel-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/On_the_Rocks_%284552715574%29.jpg');"></div>
         <div class="hotel-body">
-          <div class="hotel-loc">Olympic NP · 2 nights</div>
-          <div class="hotel-name">Kalaloch Lodge - Bluff Cabin</div>
-          <div class="hotel-meta"><strong>The only oceanfront lodging inside Olympic National Park.</strong> Individual cedar-shingle Bluff Cabins on a 100-foot bluff directly over the Pacific - private deck, wood stove, no TV/phone. The view IS the trip. We're skipping Lake Quinault Lodge (no ocean view, 35 mi inland) for this. Books 6+ months ahead for summer; Bluff Cabins are the ones to lock down. The Creekside Restaurant is a 2-minute walk.</div>
+          <div class="hotel-loc">La Push, WA · 2 nights</div>
+          <div class="hotel-name">Quileute Oceanside Resort - Oceanfront Cabin</div>
+          <div class="hotel-meta"><strong>The view trade we make instead of paying $600 for Kalaloch's Bluff Cabin.</strong> Quileute is 22 mi north of Kalaloch in La Push, a Quileute tribal village. The oceanfront cabins sit directly on First Beach with James Island looming offshore - same wild Pacific view, sea stacks, driftwood logs. Tribal-owned, simple cabins with kitchens, fireplaces, decks 50 ft from the surf. <strong>Verified availability and pricing:</strong> Expedia shows $265 USD for a 1-night stay in summer 2026. Hoh Rainforest is closer from here (18 mi vs 50 from Kalaloch). Reality check: Kalaloch Lodge runs $366 cheapest, $400 ocean-view, $600+ Bluff Cabin per Reddit and TripAdvisor reports - way over $300.<br/><br/><strong>Cheaper alternative ($179):</strong> Ocean Crest Resort, Moclips (50 mi south of Kalaloch, 100-ft bluff with ocean view, $160-200/night).</div>
           <div class="hotel-price">$285 <small>/ night</small></div>
           <div class="hotel-nights">2 nights · ~$640 total inc. tax</div>
         </div>
@@ -2954,6 +2281,56 @@
           <div class="gem-when">Lunch 11:30 - 2 PM · reserve · 25 min from Hurricane Ridge</div>
         </div>
       </a>
+
+      <a class="gem" href="https://www.powells.com/" target="_blank" rel="noopener">
+        <div class="gem-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Powells-City-of-Books-NW-Entrance_Portland-OR_2008-May.jpg/1280px-Powells-City-of-Books-NW-Entrance_Portland-OR_2008-May.jpg');"></div>
+        <div class="gem-body">
+          <div class="gem-day">Day 2 · Portland (skip-the-coast option)</div>
+          <div class="gem-name">Powell's City of Books</div>
+          <div class="gem-desc">The world's largest independent bookstore - one full city block, four floors, color-coded rooms, used + new on the same shelf. If we'd rather sleep at the coast tonight than push through Multnomah Falls, swap Pittock for an hour at Powell's instead. It's a 10-minute walk from the Portland Japanese Garden too, if you want both.</div>
+          <div class="gem-when">Open daily 10 AM - 9 PM · free · 5 min from US-26</div>
+        </div>
+      </a>
+
+      <a class="gem" href="https://japanesegarden.org/" target="_blank" rel="noopener">
+        <div class="gem-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Portland_Japanese_Garden_maple.jpg/1280px-Portland_Japanese_Garden_maple.jpg');"></div>
+        <div class="gem-body">
+          <div class="gem-day">Day 2 · Portland (alt to Pittock)</div>
+          <div class="gem-name">Portland Japanese Garden</div>
+          <div class="gem-desc">12-acre Japanese garden in Washington Park, widely rated the most authentic outside Japan - eight garden styles including a Tea Garden, Strolling Pond, and Sand & Stone garden, with a Kengo Kuma cultural village at the entrance. It's a 10-minute drive from Pittock; pick one (Pittock for the view, Japanese Garden for the contemplative walk).</div>
+          <div class="gem-when">Open 10 AM - 6 PM · $22.95/pp · reserve a time slot</div>
+        </div>
+      </a>
+
+      <a class="gem" href="https://en.wikipedia.org/wiki/Stone_House_(Portland,_Oregon)" target="_blank" rel="noopener">
+        <div class="gem-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Portland_from_Pittock_Mansion_October_2019_panorama_2.jpg/1920px-Portland_from_Pittock_Mansion_October_2019_panorama_2.jpg');"></div>
+        <div class="gem-body">
+          <div class="gem-day">Day 2 · Portland (Forest Park)</div>
+          <div class="gem-name">The Witch's Castle</div>
+          <div class="gem-desc">A moss-covered stone shell of an old comfort station tucked into Forest Park's Lower Macleay Trail - looks like a forgotten ruin from a fairy tale. Easy 0.7-mile each way from the Lower Macleay trailhead, downhill on the way in. Skip if you're tight on time, but if you've already burned an hour at Pittock and have appetite for another short walk, this is the photo people will ask about.</div>
+          <div class="gem-when">Free · open dawn-dusk · 0.7 mi each way from Lower Macleay</div>
+        </div>
+      </a>
+
+      <a class="gem" href="https://www.alltrails.com/trail/us/oregon/wahclella-falls" target="_blank" rel="noopener">
+        <div class="gem-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Wahclella_Falls_-_panoramio.jpg/1280px-Wahclella_Falls_-_panoramio.jpg');"></div>
+        <div class="gem-body">
+          <div class="gem-day">Day 2 · Columbia Gorge</div>
+          <div class="gem-name">Wahclella Falls Trail (instead of Multnomah)</div>
+          <div class="gem-desc">A 2-mile out-and-back through Tanner Creek Canyon to a 350-foot horsetail waterfall plunging into a deep mossy bowl. We swap this in for the Multnomah Falls hike - same kind of "wow", a fraction of the crowds, no permit, no parking lottery. The trail follows the creek through old-growth Doug-fir, with side waterfalls and basalt cliffs. Then 9 mi west to Multnomah Lodge for lunch with the icon falls visible from the patio - best of both worlds.</div>
+          <div class="gem-when">$5/day-use fee · no permit · I-84 Exit 40 (Bonneville Dam)</div>
+        </div>
+      </a>
+
+      <a class="gem" href="https://www.domainemadeleine.com/" target="_blank" rel="noopener">
+        <div class="gem-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2b/Hurricane_Ridge_view.jpg');"></div>
+        <div class="gem-body">
+          <div class="gem-day">Day 5/6 · Olympic Peninsula (alt lodging)</div>
+          <div class="gem-name">Domaine Madeleine B&B, Port Angeles</div>
+          <div class="gem-desc">If we ever do an Olympic-Peninsula-only trip, this is the spot. Five-room bluff-top B&B east of Port Angeles overlooking the Strait of Juan de Fuca and Victoria across the water. Five-acre gardens, hot tub on the bluff, gourmet morning breakfast included. Doesn't fit our routing this trip (we're staying at Quileute and Inn at the Market) but worth bookmarking.</div>
+          <div class="gem-when">Reference only · Port Angeles bluff · 25 min from Hurricane Ridge</div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
@@ -2987,7 +2364,7 @@
       <tbody>
         <tr>
           <td class="sched-loc"></td>
-          <td class="sched-loc">Westcliff Lodge</td>
+          <td class="sched-loc">Skamania Lodge</td>
           <td class="sched-loc">Tolovana Inn</td>
           <td class="sched-loc">Tolovana Inn</td>
           <td class="sched-loc">Kalaloch Lodge</td>
@@ -3024,7 +2401,7 @@
           <td class="sched-time">7:00 AM</td>
           <td class="sched-empty"></td>
           <td class="sched-empty"></td>
-          <td class="sched-cell" rowspan="1" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Coffee + pastries at Sea Level Bakery - 7:00 AM - 7:30 AM (30m)"><div class="sched-inner">Coffee + pastries at Sea Level Bakery</div></td>
+          <td class="sched-cell" rowspan="1" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Coffee + pastries at Elohveē Coffee Shop - 7:00 AM - 7:30 AM (30m)"><div class="sched-inner">Coffee + pastries at Elohveē</div></td>
           <td class="sched-empty"></td>
           <td class="sched-empty"></td>
           <td class="sched-cell" rowspan="2" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Breakfast at the lodge - 7:00 AM - 8:00 AM (1h 00m)"><div class="sched-inner">Breakfast at the lodge</div></td>
@@ -3052,7 +2429,7 @@
         <tr>
           <td class="sched-time">8:30 AM</td>
           <td class="sched-empty"></td>
-          <td class="sched-cell" rowspan="1" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive Hood River -&gt; Lavender Farms - 8:30 AM - 9:00 AM (30m)"><div class="sched-inner">Drive to Lavender Farms</div></td>
+          <td class="sched-cell" rowspan="1" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive Skamania -&gt; Hood River Lavender Farms - 8:30 AM - 9:30 AM (1h)"><div class="sched-inner">Drive Skamania -&gt; Lavender</div></td>
           <td class="sched-cell" rowspan="3" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive to Hoh Rainforest Visitor Center - 8:30 AM - 10:00 AM (1h 30m)"><div class="sched-inner">Drive to Hoh Rainforest Visitor Center</div></td>
           <td class="sched-cell" rowspan="2" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive Kalaloch -&gt; Lake Crescent - 8:30 AM - 9:30 AM (1h 00m)"><div class="sched-inner">Drive Kalaloch -&gt; Lake Crescent</div></td>
           <td class="sched-time sched-time-r">8:30 AM</td>
@@ -3076,7 +2453,7 @@
         <tr>
           <td class="sched-time">10:00 AM</td>
           <td class="sched-empty"></td>
-          <td class="sched-cell" rowspan="2" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive to Vista House at Crown Point - 10:00 AM - 11:00 AM (1h 00m)"><div class="sched-inner">Drive to Vista House</div></td>
+          <td class="sched-cell" rowspan="2" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive Lavender -&gt; Wahclella Falls trailhead - 10:30 AM - 11:45 AM (1h 15m)"><div class="sched-inner">Drive Lavender -&gt; Wahclella</div></td>
           <td class="sched-cell" rowspan="3" style="background:#d4edda; border-left: 3px solid #4a6b3c;" title="Hall of Mosses Trail - 10:00 AM - 11:30 AM (1h 30m)"><div class="sched-inner">Hall of Mosses Trail</div></td>
           <td class="sched-time sched-time-r">10:00 AM</td>
         </tr>
@@ -3088,7 +2465,7 @@
         <tr>
           <td class="sched-time">11:00 AM</td>
           <td class="sched-cell" rowspan="2" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive to Indianapolis Airport - 11:00 AM - 12:00 PM (1h 00m)"><div class="sched-inner">Drive to Indianapolis Airport</div></td>
-          <td class="sched-cell" rowspan="3" style="background:#d4edda; border-left: 3px solid #4a6b3c;" title="Multnomah Falls + Benson Bridge - 11:00 AM - 12:30 PM (1h 30m)"><div class="sched-inner">Multnomah Falls + Benson Bridge</div></td>
+          <td class="sched-cell" rowspan="3" style="background:#d4edda; border-left: 3px solid #4a6b3c;" title="Wahclella Falls Trail - 11:45 AM - 12:45 PM (1h)"><div class="sched-inner">Wahclella Falls Trail</div></td>
           <td class="sched-empty"></td>
           <td class="sched-empty"></td>
           <td class="sched-empty"></td>
@@ -3116,7 +2493,7 @@
         </tr>
         <tr>
           <td class="sched-time">12:30 PM</td>
-          <td class="sched-cell" rowspan="2" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Lunch at Multnomah Falls Lodge - 12:30 PM - 1:30 PM (1h 00m)"><div class="sched-inner">Lunch at Multnomah Falls Lodge</div></td>
+          <td class="sched-cell" rowspan="2" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Lunch at Multnomah Falls Lodge - 1:00 PM - 1:45 PM (45m)"><div class="sched-inner">Lunch at Multnomah Falls Lodge</div></td>
           <td class="sched-cell" rowspan="3" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Lunch: Pelican Brewing or Pizza a&#x27; fetta - 12:30 PM - 2:00 PM (1h 30m)"><div class="sched-inner">Lunch: Pelican Brewing or Pizza a&#x27; fetta</div></td>
           <td class="sched-cell" rowspan="2" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Picnic at the visitor center - 12:30 PM - 1:30 PM (1h 00m)"><div class="sched-inner">Picnic at the visitor center</div></td>
           <td class="sched-cell" rowspan="2" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Lunch + the view at Hurricane Ridge - 12:30 PM - 1:30 PM (1h 00m)"><div class="sched-inner">Lunch + the view at Hurricane Ridge</div></td>
@@ -3130,7 +2507,7 @@
         </tr>
         <tr>
           <td class="sched-time">1:30 PM</td>
-          <td class="sched-cell" rowspan="5" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive Gorge -&gt; Cannon Beach - 1:30 PM - 4:00 PM (2h 30m)"><div class="sched-inner">Drive Gorge -&gt; Cannon Beach</div></td>
+          <td class="sched-cell" rowspan="5" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive Multnomah Lodge -&gt; Pittock -&gt; Cannon Beach - 2:00 PM - 4:50 PM (2h 50m)"><div class="sched-inner">Drive via Pittock -&gt; Cannon Beach</div></td>
           <td class="sched-cell" rowspan="3" style="background:#d1ecf1; border-left: 3px solid #0d4a55;" title="Cape Disappointment State Park - 1:30 PM - 3:00 PM (1h 30m)"><div class="sched-inner">Cape Disappointment State Park</div></td>
           <td class="sched-cell" rowspan="3" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive back to the coast: Beach 4 - 1:30 PM - 3:00 PM (1h 30m)"><div class="sched-inner">Drive back to the coast: Beach 4</div></td>
           <td class="sched-cell" rowspan="2" style="background:#d4edda; border-left: 3px solid #4a6b3c;" title="Hurricane Hill Trail (or just the meadow loop) - 1:30 PM - 2:30 PM (1h 00m)"><div class="sched-inner">Hurricane Hill Trail (or just the meadow loop)</div></td>
@@ -3165,7 +2542,7 @@
         </tr>
         <tr>
           <td class="sched-time">4:00 PM</td>
-          <td class="sched-cell" rowspan="3" style="background:#e2e3e5; border-left: 3px solid #6c757d;" title="Check in at Tolovana Inn - 4:00 PM - 5:30 PM (1h 30m)"><div class="sched-inner">Check in at Tolovana Inn</div></td>
+          <td class="sched-cell" rowspan="3" style="background:#e2e3e5; border-left: 3px solid #6c757d;" title="Check in at Tolovana Inn - 4:45 PM - 6:00 PM (1h 15m)"><div class="sched-inner">Check in at Tolovana Inn</div></td>
           <td class="sched-cell" rowspan="3" style="background:#d4edda; border-left: 3px solid #4a6b3c;" title="Ecola Point + Indian Beach - 4:00 PM - 5:30 PM (1h 30m)"><div class="sched-inner">Ecola Point + Indian Beach</div></td>
           <td class="sched-empty"></td>
           <td class="sched-cell" rowspan="14" style="background:#f5f5f5; border-left: 3px solid #6c757d;" title="Home in Indianapolis - lands 5:47 PM ET / 2:47 PM PT"><div class="sched-inner">Home in IND</div></td>
@@ -3173,7 +2550,7 @@
         </tr>
         <tr>
           <td class="sched-time">4:30 PM</td>
-          <td class="sched-cell" rowspan="3" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive PDX -&gt; Hood River - 4:30 PM - 6:00 PM (1h 30m)"><div class="sched-inner">Drive PDX -&gt; Hood River</div></td>
+          <td class="sched-cell" rowspan="3" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive PDX -&gt; Stevenson - 4:30 PM - 5:30 PM (1h)"><div class="sched-inner">Drive PDX -&gt; Stevenson</div></td>
           <td class="sched-cell" rowspan="1" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive to Lake Quinault Rainforest - 4:30 PM - 5:00 PM (30m)"><div class="sched-inner">Drive to Lake Quinault Rainforest</div></td>
           <td class="sched-cell" rowspan="2" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Bainbridge -&gt; Seattle ferry - 4:30 PM - 5:30 PM (1h 00m)"><div class="sched-inner">Bainbridge -&gt; Seattle ferry</div></td>
           <td class="sched-empty"></td>
@@ -3196,7 +2573,7 @@
         </tr>
         <tr>
           <td class="sched-time">6:00 PM</td>
-          <td class="sched-cell" rowspan="2" style="background:#e2e3e5; border-left: 3px solid #6c757d;" title="Check in at Westcliff Lodge - 6:00 PM - 7:00 PM (1h 00m)"><div class="sched-inner">Check in at Westcliff Lodge</div></td>
+          <td class="sched-cell" rowspan="2" style="background:#e2e3e5; border-left: 3px solid #6c757d;" title="Check in at Skamania Lodge - 5:30 PM - 6:30 PM (1h 00m)"><div class="sched-inner">Check in at Skamania Lodge</div></td>
           <td class="sched-empty"></td>
           <td class="sched-cell" rowspan="1" style="background:#e2e3e5; border-left: 3px solid #6c757d;" title="Check in at Kalaloch Lodge - Bluff Cabin - 6:00 PM - 6:30 PM (30m)"><div class="sched-inner">Check in at Kalaloch</div></td>
           <td class="sched-time sched-time-r">6:00 PM</td>
@@ -3211,7 +2588,7 @@
         </tr>
         <tr>
           <td class="sched-time">7:00 PM</td>
-          <td class="sched-cell" rowspan="4" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Dinner: Solstice Wood Fire Pizza - 7:00 PM - 9:00 PM (2h 00m)"><div class="sched-inner">Dinner: Solstice Wood Fire Pizza</div></td>
+          <td class="sched-cell" rowspan="4" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Dinner at Cascade Dining Room - 7:00 PM - 9:00 PM (2h 00m)"><div class="sched-inner">Dinner: Cascade Dining Room</div></td>
           <td class="sched-cell" rowspan="3" style="background:#fde2d4; border-left: 3px solid #c85a2e;" title="Dinner: The Irish Table or EVOO - 7:00 PM - 8:30 PM (1h 30m)"><div class="sched-inner">Dinner: The Irish Table or EVOO</div></td>
           <td class="sched-cell" rowspan="3" style="background:#d1ecf1; border-left: 3px solid #0d4a55;" title="Ruby Beach at golden hour - 7:00 PM - 8:30 PM (1h 30m)"><div class="sched-inner">Ruby Beach at golden hour</div></td>
           <td class="sched-cell" rowspan="1" style="background:#fef3cd; border-left: 3px solid #c9a825;" title="Drive back to Kalaloch - 7:00 PM - 7:30 PM (30m)"><div class="sched-inner">Drive back to Kalaloch</div></td>
@@ -3250,7 +2627,7 @@
         </tr>
         <tr>
           <td class="sched-time">9:30 PM</td>
-          <td class="sched-cell" rowspan="1" style="background:#d1ecf1; border-left: 3px solid #0d4a55;" title="Wind down at the hotel bar - 9:30 PM - 10:00 PM (30m)"><div class="sched-inner">Wind down at the hotel bar</div></td>
+          <td class="sched-cell" rowspan="1" style="background:#d1ecf1; border-left: 3px solid #0d4a55;" title="Wind down by the firepit - 9:30 PM - 10:00 PM (30m)"><div class="sched-inner">Wind down by the firepit</div></td>
           <td class="sched-empty"></td>
           <td class="sched-empty"></td>
           <td class="sched-empty"></td>
@@ -3311,8 +2688,8 @@
         </div>
         <div class="budget-row">
           <div>
-            <div class="cat">Hotels</div>
-            <div class="det">7 nights · 4 properties · view-first picks under $300/night incl. tax</div>
+            <div class="cat">Hotels (1 of 4 BOOKED)</div>
+            <div class="det">7 nights · 4 properties · Skamania $467.26 booked + 3 remaining</div>
           </div>
           <div></div>
           <div class="amt">$2,100</div>
@@ -3396,7 +2773,7 @@
         <h4>Where to save</h4>
         <ul>
           <li>Swap Inn at the Market for Hotel Five or Ace Hotel Seattle (~$220). Saves ~$130 across two nights.</li>
-          <li>Make breakfast in-room (Tolovana suites have kitchens, Westcliff has a kitchenette) and you'll save $80-100 across the week.</li>
+          <li>Make breakfast in-room (Tolovana suites have kitchens) and you'll save $60-80 across the week.</li>
         </ul>
         <h4 style="margin-top: 18px;">Where to splurge</h4>
         <ul>
@@ -3477,9 +2854,9 @@
       </div>
 
       <div class="book-item">
-        <div class="book-what"><span class="book-tag hotel">Hotel</span> Westcliff Lodge - Hood River</div>
-        <div class="book-when">Jul 12 (1 night)</div>
-        <div class="book-detail">~$199/night + ~11.5% OR lodging tax = ~$222 total. Book at <a href="https://westcliff-lodge.com/" target="_blank" rel="noopener">westcliff-lodge.com</a> or call (541) 386-2992. Ask for a river-side cliff room. Splurge alternative: <a href="https://www.columbiagorgehotel.com/" target="_blank" rel="noopener">Columbia Gorge Hotel</a> (~$280-310, fancier but view about the same).</div>
+        <div class="book-what"><span class="book-tag hotel">Hotel</span> Skamania Lodge - Stevenson, WA</div>
+        <div class="book-when">Jul 12 (1 night) · BOOKED</div>
+        <div class="book-detail">$467.26 total for 1 night. Booked. <a href="https://www.skamania.com/" target="_blank" rel="noopener">skamania.com</a> · (509) 427-7700. Cedar-and-stone lodge on 175 forested acres above the Columbia, 4 mi east of the Bridge of the Gods.</div>
       </div>
 
       <div class="book-item">
@@ -3623,26 +3000,75 @@
 <script>
   (function() {
     const stops = [
+      // ===== DAY 1 - Sun Jul 12 =====
       { num: 'A', label: 'PDX', name: 'Portland International Airport',
-        meta: 'Sun Jul 12 · Arrive 3:16 PM PT', coord: [45.5898, -122.5951], type: 'airport' },
-      { num: '1', label: 'Hood River', name: 'Columbia Gorge Hotel & Spa',
-        meta: 'Day 1 · 1 night · 65 mi from PDX', coord: [45.7253, -121.5483] },
-      { num: '2', label: 'Cannon Beach', name: 'The Ocean Lodge',
-        meta: 'Days 2-3 · 2 nights · Haystack Rock', coord: [45.8918, -123.9615] },
-      { num: '3', label: 'Astoria-Megler', name: 'Astoria-Megler Bridge crossing',
-        meta: 'Day 4 transit · Cross into Washington', coord: [46.2188, -123.8635] },
-      { num: '4', label: 'Cape Disappointment', name: 'Cape Disappointment State Park',
-        meta: 'Day 4 stop · Lewis & Clark + lighthouse', coord: [46.2774, -124.0526] },
-      { num: '5', label: 'Kalaloch', name: 'Kalaloch Lodge (Olympic NP)',
-        meta: 'Days 4-5 · 2 nights · Hoh + beaches', coord: [47.6116, -124.3744] },
-      { num: '6', label: 'Hoh Rainforest', name: 'Hoh Rain Forest Visitor Center',
-        meta: 'Day 5 · Hall of Mosses', coord: [47.8606, -123.9348] },
-      { num: '7', label: 'Hurricane Ridge', name: 'Hurricane Ridge Visitor Center',
-        meta: 'Day 6 · Olympic Mountains overlook', coord: [47.9697, -123.4983] },
-      { num: '8', label: 'Seattle', name: 'Inn at the Market (Pike Place)',
-        meta: 'Days 6-7 · 2 nights · Pike Place Market', coord: [47.6088, -122.3402] },
+        meta: 'Day 1 · Arrive 3:16 PM PT', coord: [45.5898, -122.5951], type: 'airport' },
+      { num: '1', label: 'Skamania Lodge', name: 'Skamania Lodge, Stevenson WA',
+        meta: 'Day 1 · 1 night · BOOKED $467.26', coord: [45.6915, -121.8845], type: 'hotel' },
+
+      // ===== DAY 2 - Mon Jul 13 =====
+      { num: '2', label: 'Hood River Lavender', name: 'Hood River Lavender Farms',
+        meta: 'Day 2 morning · 50 mi east on Hwy 35', coord: [45.6378, -121.5408], type: 'sight' },
+      { num: '3', label: 'Wahclella Falls', name: 'Wahclella Falls Trail',
+        meta: 'Day 2 · 2-mi loop · 350-ft horsetail falls', coord: [45.6325, -121.9536], type: 'hike' },
+      { num: '4', label: 'Multnomah Lodge', name: 'Multnomah Falls Lodge (lunch)',
+        meta: 'Day 2 lunch · 1925 stone lodge below the falls', coord: [45.5763, -122.1158], type: 'sight' },
+      { num: '5', label: 'Pittock Mansion', name: 'Pittock Mansion, Portland',
+        meta: 'Day 2 · 1,000-ft skyline overlook · free', coord: [45.5253, -122.7164], type: 'sight' },
+      { num: '6', label: 'Tolovana Inn', name: 'Tolovana Inn, Cannon Beach',
+        meta: 'Days 2-3 · 2 nights · oceanfront Haystack view', coord: [45.8814, -123.9646], type: 'hotel' },
+      { num: '7', label: 'Haystack Rock', name: 'Haystack Rock + Cannon Beach',
+        meta: 'Day 2 sunset / Day 3 low-tide tidepools', coord: [45.8847, -123.9685], type: 'coast' },
+
+      // ===== DAY 3 - Tue Jul 14 =====
+      { num: '8', label: 'Hug Point', name: 'Hug Point sea caves + waterfall',
+        meta: 'Day 3 · 1-mi beach walk to a 15-ft waterfall', coord: [45.8324, -123.9622], type: 'coast' },
+      { num: '9', label: 'Ecola State Park', name: 'Ecola Point + Indian Beach',
+        meta: 'Day 3 · cliff overlook + Point Break beach', coord: [45.9239, -123.9764], type: 'coast' },
+
+      // ===== DAY 4 - Wed Jul 15 =====
+      { num: '10', label: 'Cape Falcon', name: 'Oswald West / Cape Falcon Trail',
+        meta: 'Day 4 · 3-5 mi old-growth coastal hike', coord: [45.7556, -123.9650], type: 'hike' },
+      { num: '11', label: 'Neahkahnie viewpoint', name: 'Neahkahnie Mountain overlook',
+        meta: 'Day 4 · 700-ft drop to Manzanita beach', coord: [45.7372, -123.9468], type: 'coast' },
+      { num: '12', label: 'Astoria Column', name: 'Astoria Column + waterfront',
+        meta: 'Day 4 · 360° view + Buoy Beer / Bowpicker lunch', coord: [46.1894, -123.8235], type: 'sight' },
+      { num: '13', label: 'Astoria-Megler Bridge', name: 'Astoria-Megler Bridge crossing',
+        meta: 'Day 4 · longest truss bridge in N. America', coord: [46.2188, -123.8635], type: 'sight' },
+      { num: '14', label: 'Cape Disappointment', name: 'Cape Disappointment State Park',
+        meta: 'Day 4 · Lewis & Clark + 2 lighthouses', coord: [46.2774, -124.0526], type: 'coast' },
+      { num: '15', label: 'Quileute Resort', name: 'Quileute Oceanside Resort, La Push',
+        meta: 'Days 4-5 · 2 nights · oceanfront cabin on First Beach', coord: [47.9133, -124.6361], type: 'hotel' },
+
+      // ===== DAY 5 - Thu Jul 16 =====
+      { num: '16', label: 'Ruby Beach', name: 'Ruby Beach (Olympic NP)',
+        meta: 'Day 5 · sea stacks + driftwood', coord: [47.7081, -124.4145], type: 'coast' },
+      { num: '17', label: 'Hoh Rainforest', name: 'Hoh Rain Forest + Hall of Mosses',
+        meta: 'Day 5 · 0.8-mi old-growth temperate rainforest', coord: [47.8606, -123.9348], type: 'hike' },
+      { num: '18', label: 'Beach 4', name: 'Beach 4 tidepools + Tree of Life',
+        meta: 'Day 5 · suspended Sitka spruce + tidepools', coord: [47.6711, -124.3700], type: 'coast' },
+      { num: '19', label: 'Lake Quinault', name: 'Lake Quinault Lodge + big spruce',
+        meta: 'Day 5 (optional) · world\'s-largest Sitka spruce', coord: [47.4626, -123.8593], type: 'hike' },
+
+      // ===== DAY 6 - Fri Jul 17 =====
+      { num: '20', label: 'Marymere Falls', name: 'Marymere Falls Trail, Lake Crescent',
+        meta: 'Day 6 · 1.8-mi old-growth + 90-ft falls', coord: [48.0606, -123.7912], type: 'hike' },
+      { num: '21', label: 'Hurricane Ridge', name: 'Hurricane Ridge, Olympic NP',
+        meta: 'Day 6 · 5,757-ft alpine view of the range', coord: [47.9697, -123.4983], type: 'hike' },
+      { num: '22', label: 'Bainbridge ferry', name: 'Bainbridge -> Seattle ferry',
+        meta: 'Day 6 · 35-min crossing into downtown', coord: [47.6228, -122.3388], type: 'sight' },
+      { num: '23', label: 'Inn at the Market', name: 'Inn at the Market, Pike Place',
+        meta: 'Days 6-7 · 2 nights · roof deck on Elliott Bay', coord: [47.6088, -122.3402], type: 'hotel' },
+
+      // ===== DAY 7 - Sat Jul 18 =====
+      { num: '24', label: 'Pike Place Market', name: 'Pike Place Market',
+        meta: 'Day 7 · flying fish + Beecher\'s + Gum Wall', coord: [47.6097, -122.3422], type: 'sight' },
+      { num: '25', label: 'Olympic Sculpture Park', name: 'Olympic Sculpture Park (SAM)',
+        meta: 'Day 7 · free outdoor art on Elliott Bay', coord: [47.6166, -122.3553], type: 'sight' },
+
+      // ===== DAY 8 - Sun Jul 19 =====
       { num: 'B', label: 'SEA', name: 'Seattle-Tacoma International Airport',
-        meta: 'Sun Jul 19 · Depart 7:15 AM PT', coord: [47.4502, -122.3088], type: 'airport' },
+        meta: 'Day 8 · Depart 7:15 AM PT', coord: [47.4502, -122.3088], type: 'airport' },
     ];
 
     const map = L.map('trip-map', {
@@ -3661,8 +3087,11 @@
     // Driving polyline (rough; no backtracking)
     const drivingPath = [
       [45.5898, -122.5951], // PDX
-      [45.7253, -121.5483], // Hood River
-      [45.5152, -122.6784], // Portland (US-26 west jct)
+      [45.6915, -121.8845], // Skamania Lodge, Stevenson WA
+      [45.6378, -121.5408], // Hood River Lavender Farms
+      [45.6325, -121.9536], // Wahclella Falls trailhead (Bonneville)
+      [45.5763, -122.1158], // Multnomah Falls Lodge
+      [45.5253, -122.7164], // Pittock Mansion, Portland
       [45.8918, -123.9615], // Cannon Beach
       [46.1879, -123.8313], // Astoria
       [46.2188, -123.8635], // Astoria-Megler Bridge
@@ -3687,17 +3116,18 @@
       lineJoin: 'round',
     }).addTo(map);
 
-    // Markers
+    // Markers (color-coded by type)
     const bounds = [];
     stops.forEach(s => {
-      const cls = s.type === 'airport' ? 'trip-marker airport' : 'trip-marker';
+      const type = s.type || 'sight';
+      const cls = `trip-marker ${type}`;
       const icon = L.divIcon({
         className: '',
         html: `<div class="${cls}">${s.num}</div>`,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
       });
-      const m = L.marker(s.coord, { icon }).addTo(map);
+      const m = L.marker(s.coord, { icon, riseOnHover: true }).addTo(map);
       m.bindPopup(`<strong>${s.num}. ${s.label}</strong>${s.name}<div class="meta">${s.meta}</div>`);
       bounds.push(s.coord);
     });
